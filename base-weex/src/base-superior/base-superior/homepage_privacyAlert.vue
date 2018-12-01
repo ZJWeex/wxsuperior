@@ -42,6 +42,7 @@ import { WxcMask } from "weex-ui";
 const modal = weex.requireModule("modal");
 const storage = weex.requireModule("storage");
 const navigator = weex.requireModule("navigator");
+const globalEvent = weex.requireModule('globalEvent');
 
 export default {
     components: { WxcMask },
@@ -67,7 +68,8 @@ export default {
             if(self.warn){
                 //该方法不可用
                 // self.exit(1);
-                modal.toast({message:"不可退出"})
+                //无参数
+                globalEvent.postEvent('exitApp');
             }else{
                 this.showAlert = false;
                 setTimeout(()=>{

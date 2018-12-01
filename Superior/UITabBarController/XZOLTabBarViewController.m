@@ -42,7 +42,7 @@
                  ];
 
     _titleList = @[
-                   @"优先商城",
+                   @"优选商城",
                    @"品牌故事",
                    @"购物车",
                    @"",
@@ -57,6 +57,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeBadge) name:@"changeBadge" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTabbar:) name:@"changeTabbar" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitApp) name:@"exitApp" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -65,6 +66,8 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     [self changeBadge];
 }
+
+#pragma mark -- Notification
 -(void)changeBadge {
     __weak typeof(self) weakSelf = self;
     [self.storage getItem:@"LocalStorage_CartData" callback:^(NSDictionary *result) {
@@ -103,6 +106,12 @@
     }
     
 }
+
+-(void)exitApp {
+    exit(1);
+}
+
+#pragma mark -- UITabBarControllerDelegate
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(thybridViewController *)viewController{
     if (!viewController.weexUrl) {
         viewController.weexUrl = [NSURL weexUrlWithFilePath: [self.urlList objectAtIndex:[self.viewControllers indexOfObject:viewController]]];
