@@ -1,0 +1,9 @@
+[submodule "TCMNetworkingKit"]
+	path = TCMNetworkingKit
+	url = https://github.com/T0421/TCMNetworkingKit.git
+[submodule "TCMLocationKit"]
+	path = TCMLocationKit
+	url = https://github.com/T0421/TCMLocationKit.git
+[submodule "tHybridKit"]
+	path = tHybridKit
+url=http://git.taocaimall.com:2469/IOS/tHybridKit.git

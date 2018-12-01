@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.gd.taocaimall</key>
+	<dict>
+		<key>AppId</key>
+		<string>1107274053</string>
+		<key>AppKey</key>
+		<string>J4b5qCxrEzgcz2ji</string>
+	</dict>
+	<key>com.Taocaimall.Superior</key>
+	<dict>
+		<key>AppId</key>
+		<string>222222</string>
+		<key>AppKey</key>
+		<string>J4b5qCxrEzgcz2ji</string>
+	</dict>
+	<key>com.Taocaimall.WeexDemo</key>
+	<dict>
+		<key>AppId</key>
+		<string>1107274053</string>
+		<key>AppKey</key>
+		<string>J4b5qCxrEzgcz2ji</string>
+	</dict>
+</dict>
+</plist>

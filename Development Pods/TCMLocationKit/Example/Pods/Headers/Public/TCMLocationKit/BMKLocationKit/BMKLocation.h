@@ -1,0 +1,1 @@
+../../../../../../TCMLocationKit/Frameworks/BMKLocationKit.framework/Headers/BMKLocation.h

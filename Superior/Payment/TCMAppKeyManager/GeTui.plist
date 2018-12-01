@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.gd.taocaimall</key>
+	<dict>
+		<key>AppId</key>
+		<string>UQrXbkEMlb7MExbpGhqbi5</string>
+		<key>AppKey</key>
+		<string>sux7yCay6S7D2nXrYQgJ35</string>
+		<key>AppSecret</key>
+		<string>9Ze8lkDpsA90CFy2MpqhJ6</string>
+		<key>placeholder</key>
+		<string>***************************debug数据用于测试环境***************************</string>
+		<key>AppId.debug</key>
+		<string>ehuImTWhvwA3dugHkxG0N9</string>
+		<key>AppKey.debug</key>
+		<string>gxSPlMqtH17IIHeBsHw2a6</string>
+		<key>AppSecret.debug</key>
+		<string>5a45BSUTAAADTu0HlmMXN</string>
+	</dict>
+	<key>com.Taocaimall.Superior</key>
+	<dict>
+		<key>AppId</key>
+		<string>oFQvzRlB8O9n51WtUEZPb3</string>
+		<key>AppKey</key>
+		<string>r6QrJTvlcI9IWRcXLYZw51</string>
+		<key>AppSecret</key>
+		<string>8twNSKzSbh5wp2YpdJHSEA</string>
+		<key>placeholder</key>
+		<string>***************************debug数据用于开发环境***************************</string>
+		<key>AppId.debug</key>
+		<string>DwZ5lFrrNX6oKNpknJq4O9</string>
+		<key>AppKey.debug</key>
+		<string>8xasGAvZoN6capu2ZyL9A</string>
+		<key>AppSecret.debug</key>
+		<string>Yhqarb7Dhe7280DNdpgbuA</string>
+	</dict>
+	<key>com.Taocaimall.WeexDemo</key>
+	<dict>
+		<key>AppId</key>
+		<string>TPlEyUoPILAAmlrvFVW8V9</string>
+		<key>AppKey</key>
+		<string>5s42Qkym438jPSZvoVRSZ9</string>
+		<key>AppSecret</key>
+		<string>IeVRtsZkHhAG9ihTVzaJt5</string>
+		<key>placeholder</key>
+		<string>***************************debug数据用于测试环境***************************</string>
+		<key>AppId.debug</key>
+		<string>VvVBEK5tzc89W7HCxuIYa1</string>
+		<key>AppKey.debug</key>
+		<string>spBOkb1TuS6W7rhdH5gGD3</string>
+		<key>AppSecret.debug</key>
+		<string>fWZKyIK0Ig7YDciY55qzF8</string>
+	</dict>
+	<key>com.Taocaimall.WeexDemo.epFresh</key>
+	<dict>
+		<key>AppId</key>
+		<string>TPlEyUoPILAAmlrvFVW8V9</string>
+		<key>AppKey</key>
+		<string>5s42Qkym438jPSZvoVRSZ9</string>
+		<key>AppSecret</key>
+		<string>IeVRtsZkHhAG9ihTVzaJt5</string>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.Taocaimall.WeexDemo</key>
+	<dict>
+		<key>WARNING</key>
+		<string>AppId修改请同步请配置【Targets-&gt;Info-&gt;URL Types-&gt;winxin-&gt;URL Schemes】</string>
+		<key>AppId</key>
+		<string>wx30d9813f50c7f96a</string>
+		<key>AppSecret</key>
+		<string>wx30d9813f50c7f96a</string>
+	</dict>
+	<key>com.Taocaimall.Superior</key>
+	<dict>
+		<key>WARNING</key>
+		<string>AppId修改请同步请配置【Targets-&gt;Info-&gt;URL Types-&gt;winxin-&gt;URL Schemes】</string>
+		<key>AppId</key>
+		<string>wx30d9813f50c7f96a</string>
+		<key>AppSecret</key>
+		<string>wx30d9813f50c7f96a</string>
+	</dict>
+	<key>com.gd.taocaimall</key>
+	<dict>
+		<key>WARNING</key>
+		<string>AppId修改请同步请配置【Targets-&gt;Info-&gt;URL Types-&gt;winxin-&gt;URL Schemes】</string>
+		<key>AppId</key>
+		<string>wx30d9813f50c7f96a</string>
+		<key>AppSecret</key>
+		<string>wx30d9813f50c7f96a</string>
+	</dict>
+</dict>
+</plist>

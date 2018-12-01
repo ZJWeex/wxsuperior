@@ -1,0 +1,38 @@
+{
+  "name": "TCMLocationKit",
+  "version": "0.1",
+  "summary": "Method library based on Baidu positioning and encapsulation.",
+  "description": "Method library based on Baidu positioning and encapsulation.",
+  "homepage": "https://github.com/T0421/TCMLocationKit",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Dao": "cilike@sina.cn"
+  },
+  "source": {
+    "git": "https://github.com/T0421/TCMLocationKit.git",
+    "tag": "v0.1"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "requires_arc": true,
+  "source_files": "TCMLocationKit/*",
+  "public_header_files": "TCMLocationKit/*.h",
+  "vendored_frameworks": "TCMLocationKit/Frameworks/*.framework",
+  "frameworks": [
+    "CoreLocation",
+    "Foundation",
+    "UIKit",
+    "SystemConfiguration",
+    "AdSupport",
+    "Security",
+    "CoreTelephony"
+  ],
+  "libraries": [
+    "sqlite3.0",
+    "stdc++.6.0.9"
+  ]
+}

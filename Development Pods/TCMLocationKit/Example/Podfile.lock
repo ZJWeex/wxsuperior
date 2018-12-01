@@ -1,0 +1,25 @@
+PODS:
+  - Expecta (1.0.6)
+  - MJExtension (3.0.13)
+  - Specta (1.0.7)
+  - TCMLocationKit (0.1)
+
+DEPENDENCIES:
+  - Expecta
+  - MJExtension
+  - Specta
+  - TCMLocationKit (from `../`)
+
+EXTERNAL SOURCES:
+  TCMLocationKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
+  MJExtension: 5932755f451458eefa24239358817f8d291240c7
+  Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
+  TCMLocationKit: 464da3db363ae8e79a22e83d7cd2c9c9a8ac078a
+
+PODFILE CHECKSUM: 93f7d1e48d00a9af22e46f00dde13ac57f4db0d9
+
+COCOAPODS: 1.4.0.rc.1
