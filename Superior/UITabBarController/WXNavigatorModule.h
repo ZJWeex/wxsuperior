@@ -3,7 +3,7 @@
 //  Superior
 //
 //  Created by ZZJ on 2018/11/1.
-//  Copyright © 2018 淘菜猫. All rights reserved.
+//  Copyright © 2018 taobao. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

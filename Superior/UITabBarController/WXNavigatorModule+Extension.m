@@ -3,7 +3,7 @@
 //  Superior
 //
 //  Created by ZZJ on 2018/12/1.
-//  Copyright © 2018 淘菜猫. All rights reserved.
+//  Copyright © 2018 taobao. All rights reserved.
 //
 
 #import "WXNavigatorModule+Extension.h"

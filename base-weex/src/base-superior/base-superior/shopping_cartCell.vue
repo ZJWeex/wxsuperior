@@ -147,7 +147,21 @@ export default {
         headerShowInfo:function(){
             const self = this;
             var str = ''
-            if(this.cartItem.selected == false){
+            var unselectAll = true;
+            //计算分组金额
+            var groupPrice = 0.00;
+            for (let j = 0; j < this.cartItem.supGoodsList.length; j++) {
+                const itemGoods = this.cartItem.supGoodsList[j];
+                //选中的商品,区分商品是否失效
+                if(itemGoods.expiryStatus == 'false'){
+                    if(itemGoods.selected == undefined ||itemGoods.selected){
+                        var itemTotalPrice = itemGoods.count*itemGoods.supStorePrice;
+                        groupPrice =Number(groupPrice) + Number(itemTotalPrice);
+                        unselectAll = false
+                    }
+                } 
+            }
+            if(unselectAll){
                 this.cartItem.activityPower.forEach(activity => {
                     str = str+ "满"+activity.fullPrice+"元减"+activity.minusPrice+"元   ";
                 });
@@ -155,18 +169,6 @@ export default {
                     self.showCouDan = true;
                 }
             }else{
-                //计算分组金额
-                var groupPrice = 0.00;
-                for (let j = 0; j < this.cartItem.supGoodsList.length; j++) {
-                    const itemGoods = this.cartItem.supGoodsList[j];
-                    //选中的商品,区分商品是否失效
-                    if(itemGoods.expiryStatus == 'false'){
-                        if(itemGoods.selected == undefined ||itemGoods.selected){
-                            var itemTotalPrice = itemGoods.count*itemGoods.supStorePrice;
-                            groupPrice =Number(groupPrice) + Number(itemTotalPrice);
-                        }
-                    } 
-                }
                 if(this.cartItem.activityPower && this.cartItem.activityPower.length > 0){
                     var obj = self.recursiveActivityInfo(self.cartItem.activityPower,groupPrice,0)
                     str = obj.info;

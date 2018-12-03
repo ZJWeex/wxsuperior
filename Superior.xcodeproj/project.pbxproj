@@ -84,6 +84,7 @@
 		984E05907ECEACFA68A238FB /* libPods-SuperiorUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 003F38B9DE31C1DDA23C3A8D /* libPods-SuperiorUITests.a */; };
 		B6BA306421B2668400DE9E94 /* WXGlobalEventModule+PostEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA306121B2602900DE9E94 /* WXGlobalEventModule+PostEvent.m */; };
 		B6BA306821B2701300DE9E94 /* WXNavigatorModule+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA306721B2701300DE9E94 /* WXNavigatorModule+Extension.m */; };
+		B6BA307821B5183E00DE9E94 /* WXPickerModule+Evnet.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA307721B5183E00DE9E94 /* WXPickerModule+Evnet.m */; };
 		D234901A4E3D49830EC91B88 /* libPods-Superior.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 782F76A87ECEB6F34CA45938 /* libPods-Superior.a */; };
 		F6E39D26F7044E371EAEAC73 /* libPods-SuperiorTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A782A51DBE0436B0A71E0D6 /* libPods-SuperiorTests.a */; };
 /* End PBXBuildFile section */
@@ -218,6 +219,9 @@
 		B6BA306521B26F8E00DE9E94 /* WXNavigatorModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WXNavigatorModule.h; sourceTree = "<group>"; };
 		B6BA306621B2701300DE9E94 /* WXNavigatorModule+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WXNavigatorModule+Extension.h"; sourceTree = "<group>"; };
 		B6BA306721B2701300DE9E94 /* WXNavigatorModule+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WXNavigatorModule+Extension.m"; sourceTree = "<group>"; };
+		B6BA307521B5183C00DE9E94 /* WXPickerModule+Evnet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WXPickerModule+Evnet.h"; sourceTree = "<group>"; };
+		B6BA307621B5183D00DE9E94 /* WXPickerModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXPickerModule.h; sourceTree = "<group>"; };
+		B6BA307721B5183E00DE9E94 /* WXPickerModule+Evnet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WXPickerModule+Evnet.m"; sourceTree = "<group>"; };
 		CF5A4BA7B697E671E5164655 /* Pods-SuperiorTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperiorTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuperiorTests/Pods-SuperiorTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E2333B1B3EE27EC2AE5D11CF /* Pods-SuperiorUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperiorUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuperiorUITests/Pods-SuperiorUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED01B29BDE8E04421B6A5526 /* Pods-Superior.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Superior.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Superior/Pods-Superior.debug.xcconfig"; sourceTree = "<group>"; };
@@ -361,6 +365,9 @@
 		3BAE2B5C2180794600CD7DBA /* UITabBarController */ = {
 			isa = PBXGroup;
 			children = (
+				B6BA307621B5183D00DE9E94 /* WXPickerModule.h */,
+				B6BA307521B5183C00DE9E94 /* WXPickerModule+Evnet.h */,
+				B6BA307721B5183E00DE9E94 /* WXPickerModule+Evnet.m */,
 				B6BA306221B2608900DE9E94 /* WXGlobalEventModule.h */,
 				B6BA306321B260F700DE9E94 /* WXGlobalEventModule+PostEvent.h */,
 				B6BA306121B2602900DE9E94 /* WXGlobalEventModule+PostEvent.m */,
@@ -770,6 +777,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BC13EF22109C6D5004C13E5 /* SocialShare.m in Sources */,
+				B6BA307821B5183E00DE9E94 /* WXPickerModule+Evnet.m in Sources */,
 				B6BA306421B2668400DE9E94 /* WXGlobalEventModule+PostEvent.m in Sources */,
 				3BE8CB6D2108932200445A48 /* GDPaymentSystem.m in Sources */,
 				3BC13EF52109C72D004C13E5 /* SocialShareMessage.m in Sources */,
