@@ -1,8 +1,12 @@
 <template>
-     <scroller class="wrapper" @viewappear="viewappear"> 
+     <scroller class="wrapper" 
+               alwaysScrollableVertical='true'
+               offset-accuracy="2" 
+               @viewappear="viewappear"
+               @scroll="scrollHandler"> 
          <!-- 用户信息区 -->
         <div class="topZone">
-            <image class="topZone" :src="backgroundImage" />
+            <image class="topZone" ref="bgImage" :src="backgroundImage" />
             <div class="topZone | topZoneContent" @click="MineInformation">
                 <div class="protraitZone">
                     <image class="protrait"  :src='userInfo.photoPath' />
@@ -59,7 +63,7 @@ import Fetch from '@/base-superior/Fetch.js'
 
 const modal = weex.requireModule('modal')
 const dom = weex.requireModule('dom')
-
+const animation = weex.requireModule('animation')
 
 const storage = weex.requireModule("storage");
 import navigation from "@/base-superior/components/NavigationBar.vue";
@@ -333,6 +337,23 @@ export default {
                 })
             }
         },
+        //滑动回调
+        scrollHandler:function(event){     
+            var offsetY = event.contentOffset.y;
+            if(offsetY >= 0){
+                var image = this.$refs.bgImage
+                var imgH = 300;//图片指定的高度
+                var scale = 1+offsetY/imgH;
+                animation.transition(image,{
+                    styles:{
+                        transform:'scale('+scale+') '+'translateY(-'+offsetY/2+')',
+                    },
+                    duration: 0,
+                    needLayout:false,
+                    delay: 0
+                },function (){});
+            }  
+        },
     }
 }
 </script>
@@ -346,7 +367,7 @@ export default {
     }
     .topZone {
         width: 750px;
-        height: 265px;
+        height: 300px;
     }
     .topZoneContent {
         padding-left: 20px;
