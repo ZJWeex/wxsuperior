@@ -23,7 +23,12 @@
                     </div>
                 </div>
             </cell>
-            <div ref="fixed" class="fixedItem">
+            <div ref="fixed" class="fixedItem"
+                 ontouchcancel='ontouchcancel' 
+                @touchstart="ontouchstart" 
+                @touchmove="ontouchmove" 
+                @touchend="ontouchend">
+                <!-- <text>{{ moveText }}</text> -->
                 <ButtonItem title="" :imgSize= {width:50,height:50} 
                   img="https://s3.cn-north-1.amazonaws.com.cn/h5.taocai.mobi/down/debug.IPA/weexIcon/goodsIcon/shopping_cart2x.png" 
                   :badge='cartGoodsCount' 
@@ -40,15 +45,18 @@ import Define from "@/base-superior/Define.js";
 import DB from "@/base-superior/base-superior/shopping_cartdb.js"
 import navigation from "@/base-superior/components/NavigationBar.vue";
 import ButtonItem from "@/base-superior/components/ButtonItem.vue";
+import { Utils } from 'weex-ui';
 
 const modal = weex.requireModule("modal");
 const navigator = weex.requireModule("navigator");
 const storage = weex.requireModule("storage");
+const animation = weex.requireModule('animation')
 
 export default {
     components: { ButtonItem, navigation },
     data() {
         return {
+            moveText:'0',
             title: "主题活动",
             page: 1,
             supSubjectId: "", //活动ID
@@ -80,6 +88,123 @@ export default {
                 self.cartGoodsCount = count;
             })
         },
+        //手势事件,开始
+        ontouchstart:function(e){
+            const { env } = weex.config;
+            const width = 750;
+            const height = env.deviceHeight / env.deviceWidth * 750;
+            console.log("ontouchStart ")
+            var changedTouche = e.changedTouches[0];
+            var fixed = this.$refs.fixed
+            var x = changedTouche.pageX+90-width;
+            var y = changedTouche.pageY+150-height;
+            animation.transition(fixed,{
+                    styles:{
+                        transform:`translate(${x}px, ${y}px)`,
+                        transformOrigin: 'center center'
+                    },
+                    duration: 0,
+                    needLayout:false,
+                    delay: 0
+                },function (){});
+            this.moveText = Number(changedTouche.pageX.toFixed(0))+":"+Number(changedTouche.pageY.toFixed(0));
+        },
+        ontouchmove:function(e){
+            const { env } = weex.config;
+            const width = 750;
+            const height = env.deviceHeight / env.deviceWidth * 750;
+            console.log("ontouchMove ")
+            var changedTouche = e.changedTouches[0];
+            var fixed = this.$refs.fixed
+            var x = changedTouche.pageX+90-width;
+            var y = changedTouche.pageY+150-height;
+            
+            if(x>40){
+                x=40;
+            }else if(x<-610){
+                x= -610;
+            }
+            var navH = Utils.env.isIPhoneX()?176:130;
+            var limtY = height-navH-200;
+            
+            if(y>100){
+                y = 100;
+            }else if(y<-limtY){
+                y = -limtY;
+            }
+            animation.transition(fixed,{
+                    styles:{
+                        transform:`translate(${x}px, ${y}px)`,
+                        transformOrigin: 'center center'
+                    },
+                    duration: 0,
+                    needLayout:false,
+                    delay: 0
+                },function (){});
+            this.moveText = Number(changedTouche.pageX.toFixed(0))+":"+Number(y.toFixed(0));
+        },
+        ontouchend:function(e){
+            const { env } = weex.config;
+            const width = 750;
+            const height = env.deviceHeight / env.deviceWidth * 750;
+            console.log("ontouchEnd ")
+            var changedTouche = e.changedTouches[0];
+            var fixed = this.$refs.fixed
+            var x = changedTouche.pageX+90-width;
+            var y = changedTouche.pageY+150-height;
+            
+            if(x>40){
+                x=40;
+            }else if(x<-610){
+                x= -610;
+            }
+            var navH = Utils.env.isIPhoneX()?176:130;
+            var limtY = height-navH-200;
+            
+            if(y>100){
+                y = 100;
+            }else if(y<-limtY){
+                y = -limtY;
+            }
+           /*
+            animation.transition(fixed,{
+                    styles:{
+                        transform:`translate(${x}px, ${y}px)`,
+                        transformOrigin: 'center center'
+                    },
+                    duration: 0.1,
+                    needLayout:false,
+                    delay: 0
+                },function (){});
+            */   
+            if(x>=-285){
+                animation.transition(fixed,{
+                    styles:{
+                        transform:`translate(0px, ${y}px)`,
+                        transformOrigin: 'center center'
+                    },
+                    duration: 300,
+                    timingFunction:'ease',
+                    needLayout:false,
+                    delay: 100
+                },function (){});
+            }else{
+                animation.transition(fixed,{
+                    styles:{
+                        transform:`translate(-570px, ${y}px)`,
+                        transformOrigin: 'center center'
+                    },
+                    duration: 300,
+                    timingFunction:'ease',
+                    needLayout:false,
+                    delay: 100
+                },function (){});
+            }
+            this.moveText = Number(changedTouche.pageX.toFixed(0))+":"+Number(y.toFixed(0));
+        },
+        ontouchcancel:function(e) {
+          console.log("ontouchCancel " + console.log(e))
+       },
         //跳转购物车
         goToShoppingCart: function() {
             storage.getItem('fromCart',function(ret){
@@ -327,11 +452,12 @@ export default {
 
 .fixedItem {
     position: fixed;
+    z-index: 999;
     width: 100;
     height: 100;
     background-color: #f0f0f0;
-    right: 32;
-    bottom: 80;
+    right: 40;
+    bottom: 100;
     border-radius: 50;
     align-items: center;
     justify-content: center;

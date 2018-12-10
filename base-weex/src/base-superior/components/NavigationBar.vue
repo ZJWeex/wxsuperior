@@ -99,8 +99,11 @@ export default {
         this.pageName = this.getUrlParam('title')
       } else if (WXEnvironment.platform.toLowerCase() === 'ios') {
         //IPHONE-X系列高度变换
-        if (WXEnvironment.deviceHeight == 2436 || WXEnvironment.deviceHeight == 2688 ||WXEnvironment.deviceHeight ==1792) {
+        if (WXEnvironment.deviceHeight == 2436 || WXEnvironment.deviceHeight == 2688) {
           this.height = 88 * 1125 / WXEnvironment.deviceWidth
+        }else if(WXEnvironment.deviceHeight ==1792){
+          //XR
+          this.height = 88 * 750 / WXEnvironment.deviceWidth
         } else {
         this.height = 40 * 750 / WXEnvironment.deviceWidth
 
