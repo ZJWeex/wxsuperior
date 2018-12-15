@@ -18,11 +18,14 @@
  */
 
 #import "WXThreadSafeMutableArray.h"
+#import <pthread/pthread.h>
 
 @interface WXThreadSafeMutableArray ()
-
-@property (nonatomic, strong) dispatch_queue_t queue;
-@property (nonatomic, strong) NSMutableArray* array;
+{
+    NSMutableArray* _array;
+    pthread_mutex_t _safeThreadArrayMutex;
+    pthread_mutexattr_t _safeThreadArrayMutexAttr;
+}
 
 @end
 
@@ -32,8 +35,9 @@
 {
     self = [super init];
     if (self) {
-        NSString* uuid = [NSString stringWithFormat:@"com.taobao.weex.array_%p", self];
-        _queue = dispatch_queue_create([uuid UTF8String], DISPATCH_QUEUE_CONCURRENT);
+        pthread_mutexattr_init(&(_safeThreadArrayMutexAttr));
+        pthread_mutexattr_settype(&(_safeThreadArrayMutexAttr), PTHREAD_MUTEX_RECURSIVE); // must use recursive lock
+        pthread_mutex_init(&(_safeThreadArrayMutex), &(_safeThreadArrayMutexAttr));
     }
     return self;
 }
@@ -56,11 +60,11 @@
     return self;
 }
 
-- (NSArray *)initWithContentsOfFile:(NSString *)path
+- (instancetype)initWithArray:(NSArray *)array
 {
     self = [self initCommon];
     if (self) {
-        _array = [NSMutableArray arrayWithContentsOfFile:path];
+        _array = [NSMutableArray arrayWithArray:array];
     }
     return self;
 }
@@ -88,85 +92,206 @@
 
 - (NSUInteger)count
 {
-    __block NSUInteger count;
-    dispatch_sync(_queue, ^{
-        count = _array.count;
-    });
-    return count;
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array count];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
 - (id)objectAtIndex:(NSUInteger)index
 {
-    __block id obj;
-    dispatch_sync(_queue, ^{
-        obj = _array[index];
-    });
-    return obj;
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array objectAtIndex:index];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
-- (NSEnumerator *)keyEnumerator
+- (id)objectAtIndexedSubscript:(NSUInteger)index
 {
-    __block NSEnumerator *enu;
-    dispatch_sync(_queue, ^{
-        enu = [_array objectEnumerator];
-    });
-    return enu;
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array objectAtIndexedSubscript:index];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (id)firstObject
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array firstObject];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (id)lastObject
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array lastObject];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (BOOL)containsObject:(id)anObject
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array containsObject:anObject];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (NSEnumerator *)objectEnumerator
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array objectEnumerator];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (NSEnumerator *)reverseObjectEnumerator
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array reverseObjectEnumerator];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
 - (void)insertObject:(id)anObject atIndex:(NSUInteger)index
 {
-    dispatch_barrier_async(_queue, ^{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
         [_array insertObject:anObject atIndex:index];
-    });
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
-- (void)addObject:(id)anObject;
+- (void)setObject:(id)anObject atIndexedSubscript:(NSUInteger)index
 {
-    dispatch_barrier_async(_queue, ^{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        [_array setObject:anObject atIndexedSubscript:index];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (void)addObject:(id)anObject
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
         [_array addObject:anObject];
-    });
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (void)removeObject:(id)anObject
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        [_array removeObject:anObject];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
 - (void)removeObjectAtIndex:(NSUInteger)index
 {
-    dispatch_barrier_async(_queue, ^{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
         [_array removeObjectAtIndex:index];
-    });
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
 - (void)removeLastObject
 {
-    dispatch_barrier_async(_queue, ^{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
         [_array removeLastObject];
-    });
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (void)removeAllObjects
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        [_array removeAllObjects];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
 - (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject
 {
-    dispatch_barrier_async(_queue, ^{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
         [_array replaceObjectAtIndex:index withObject:anObject];
-    });
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
 - (NSUInteger)indexOfObject:(id)anObject
 {
-    __block NSUInteger index = NSNotFound;
-    dispatch_sync(_queue, ^{
-        for (int i = 0; i < [_array count]; i ++) {
-            if ([_array objectAtIndex:i] == anObject) {
-                index = i;
-                break;
-            }
-        }
-    });
-    return index;
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array indexOfObject:anObject];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
+}
+
+- (id)copy
+{
+    @try {
+        pthread_mutex_lock(&_safeThreadArrayMutex);
+        return [_array copy];
+    }
+    @finally {
+        pthread_mutex_unlock(&_safeThreadArrayMutex);
+    }
 }
 
 - (void)dealloc
 {
-    if (_queue) {
-        _queue = NULL;
-    }
+    pthread_mutex_destroy(&_safeThreadArrayMutex);
+    pthread_mutexattr_destroy(&_safeThreadArrayMutexAttr);
 }
 
 @end

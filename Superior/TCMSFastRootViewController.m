@@ -72,7 +72,7 @@
     scorll.backgroundColor = UIColor.brownColor;
     scorll.bounces = NO;
     scorll.showsHorizontalScrollIndicator = NO;
-
+    
     scorll.delegate = self;
     [self.view addSubview:scorll];
 

@@ -29,7 +29,7 @@ target 'Superior' do
   pod 'Alipay-SDK', '~> 15.5.0'
   pod 'MBProgressHUD', '~> 1.1.0'
   pod 'SDWebImage/GIF'
-  pod 'GTSDK'
+  pod 'GTSDK','~>2.2.0'
 
 #    pod 'tHybridKit', '~> 0.2.5'
 end

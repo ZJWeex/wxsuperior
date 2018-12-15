@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import weex from 'weex-vue-render'
-
+/*
 // import drag from 'v-drag.js'
 // 全局注册拖拽指令
 Vue.directive('drag', {
@@ -9,7 +9,7 @@ Vue.directive('drag', {
     }
 })
 Vue.use(drag)
-
+*/
 weex.init(Vue)
     /*
     <template>

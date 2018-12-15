@@ -43,6 +43,6 @@ Pod::Spec.new do |s|
 
   s.public_header_files = 'tHybridKit/**/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'WeexSDK', '~> 0.16.2'
+  s.dependency 'WeexSDK'
   s.dependency 'SDWebImage', '~> 4.2.2'
 end

@@ -10,12 +10,12 @@
         ref="button_item" 
         :style="bindBtnType()" @click="onclick">
         <image v-if="img.length > 0" :src='img' 
-            :style="{ width:imgSize.width + 'px', height:imgSize.height + 'px'}"/>
+            :style="imgBindStyle()"/>
         <text v-if="title.length > 0" class="button-title" 
               :style="{ fontSize:textCong.font + 'px', color:textCong.color }">{{ title }}</text>
         <div class="badge-tag" v-if="badge > 0" 
-            :style="{right:(textCong.dotRight==10 || !textCong.dotRight)?10:textCong.dotRight, 
-                     top:(textCong.dotTop==10 || !textCong.dotTop)?10:textCong.dotTop,
+            :style="{right:(textCong.dotRight==10 || !textCong.dotRight)?10:textCong.dotRight<0?0:textCong.dotRight, 
+                     top:(textCong.dotTop==10 || !textCong.dotTop)?10:textCong.dotTop<0?0:textCong.dotRight,
                      'padding-left':badge>1?8:10,'padding-right':badge>1?8:10}">
           <text class="badge-text">{{badge}}</text>
         </div>
@@ -89,6 +89,21 @@ export default {
             }
             return directionType;
         },
+        //img的布局
+        imgBindStyle:function(){
+            const that = this;
+            const imgWHType = {width:that.imgSize.width + 'px', height:that.imgSize.height + 'px'};
+            let imgMarginTopType = {}
+            if(that.textCong.dotTop<0){
+                imgMarginTopType = {'margin-top':Math.abs(that.textCong.dotTop)}
+            }
+            let imgMarginRightType = {}
+            if(that.textCong.dotRight<0){
+                imgMarginRightType = {'margin-right':Math.abs(that.textCong.dotRight)}
+            }
+            let relustStyle = {...imgWHType,...imgMarginTopType,...imgMarginRightType}
+            return relustStyle;
+        },
         //点击事件
         onclick:function(e) {
             this.$emit('onclick', e);
@@ -101,7 +116,7 @@ export default {
     justify-content: center;
     align-items: center;
     border-bottom-style: solid;
-    /* overflow: visible; */
+    overflow: visible;
     /* background-color: aqua;  */
   }
   .buttonshadow{

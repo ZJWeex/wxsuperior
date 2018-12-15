@@ -27,6 +27,7 @@
 #import "WXSDKInstance_private.h"
 #import "WXHandlerFactory.h"
 #import "WXValidateProtocol.h"
+#import "WXAnalyzerCenter.h"
 
 @implementation WXModuleMethod
 
@@ -46,6 +47,9 @@
 
 - (NSInvocation *)invoke
 {
+    if ([WXAnalyzerCenter isInteractionLogOpen]) {
+        WXLogDebug(@"wxInteractionAnalyzer : [client][callnativemodulestart],%@,%@,%@",self.instance.instanceId,self.moduleName,self.methodName);
+    }
     if (self.instance.needValidate) {
         id<WXValidateProtocol> validateHandler = [WXHandlerFactory handlerForProtocol:@protocol(WXValidateProtocol)];
         if (validateHandler) {
@@ -59,6 +63,10 @@
                 WXLogError(@"%@", errorMessage);
                 WX_MONITOR_FAIL(WXMTJSBridge, WX_ERR_INVOKE_NATIVE, errorMessage);
                 if ([result.error respondsToSelector:@selector(userInfo)]) {
+                    // update the arguments when validate failed, so update the arguments for invoking -[NSError userInfo].
+                    if ([self respondsToSelector:NSSelectorFromString(@"arguments")]) {
+                        [self setValue:nil forKey:@"arguments"];
+                    }
                     NSInvocation *invocation = [self invocationWithTarget:result.error selector:@selector(userInfo)];
                     [invocation invoke];
                     return invocation;
@@ -99,6 +107,9 @@
     
     if (isSync) {
         [invocation invoke];
+        if ([WXAnalyzerCenter isInteractionLogOpen]) {
+            WXLogDebug(@"wxInteractionAnalyzer : [client][callnativemoduleEnd],%@,%@,%@",self.instance.instanceId,self.moduleName,self.methodName);
+        }
         return invocation;
     } else {
         [self _dispatchInvocation:invocation moduleInstance:moduleInstance];
@@ -109,7 +120,13 @@
 - (void)commitModuleInvoke
 {
     id<WXAppMonitorProtocol> appMonitorHandler = [WXHandlerFactory handlerForProtocol:@protocol(WXAppMonitorProtocol)];
-    if ([appMonitorHandler respondsToSelector:@selector(commitAppMonitorAlarm:monitorPoint:success:errorCode:errorMsg:arg:)]) {
+	if ([appMonitorHandler respondsToSelector:@selector(commitMonitorWithPage:monitorPoint:args:)]) {
+		NSDictionary * args = @{
+								@"url": self.instance.pageName ?: @"",
+								@"name": [NSString stringWithFormat:@"%@.%@", self.moduleName, self.methodName],
+								};
+		[appMonitorHandler commitMonitorWithPage:@"weex" monitorPoint:@"invokeModule" args:args];
+	} else if ([appMonitorHandler respondsToSelector:@selector(commitAppMonitorAlarm:monitorPoint:success:errorCode:errorMsg:arg:)]) {
         NSString * arg = [NSString stringWithFormat:@"%@.%@", self.moduleName, self.methodName];
         [appMonitorHandler commitAppMonitorAlarm:@"weex" monitorPoint:@"invokeModule" success:NO errorCode:@"101" errorMsg:self.instance.pageName arg:arg];
     }
@@ -120,6 +137,9 @@
     // dispatch to user specified queue or thread, default is main thread
     dispatch_block_t dispatchBlock = ^ (){
         [invocation invoke];
+        if ([WXAnalyzerCenter isInteractionLogOpen]) {
+            WXLogDebug(@"wxInteractionAnalyzer : [client][callnativemoduleEnd],%@,%@,%@",self.instance.instanceId,self.moduleName,self.methodName);
+        }
     };
     
     NSThread *targetThread = nil;

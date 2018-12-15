@@ -1,9 +1,9 @@
 {
   "name": "tHybridKit",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "summary": "Native + Weex + H5",
   "description": "Encapsulation For Native + Weex + H5",
-  "homepage": "https://github.com/T0421/tHybrid.git",
+  "homepage": "https://github.com/T0421/tHybridKit.git",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,8 +12,8 @@
     "Dao": "cilike@sina.cn"
   },
   "source": {
-    "git": "https://github.com/T0421/tHybrid.git",
-    "tag": "v0.2.5"
+    "git": "https://github.com/T0421/tHybridKit.git",
+    "tag": "v0.3.0"
   },
   "platforms": {
     "ios": "8.0"
@@ -26,7 +26,7 @@
   "public_header_files": "tHybridKit/**/**/*.h",
   "dependencies": {
     "WeexSDK": [
-      "~> 0.16.2"
+
     ],
     "SDWebImage": [
       "~> 4.2.2"

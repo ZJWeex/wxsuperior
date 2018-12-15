@@ -28,6 +28,7 @@
 #import "WXResourceRequestHandlerDefaultImpl.h"
 #import "WXNavigationDefaultImpl.h"
 #import "WXURLRewriteDefaultImpl.h"
+#import "WXJSFrameworkLoadDefaultImpl.h"
 
 #import "WXSDKManager.h"
 #import "WXSDKError.h"
@@ -37,6 +38,9 @@
 #import "WXLog.h"
 #import "WXUtility.h"
 #import "WXExtendCallNativeManager.h"
+#import "WXExceptionUtils.h"
+#import "WXConfigCenterProtocol.h"
+#import "WXComponent+Layout.h"
 
 @implementation WXSDKEngine
 
@@ -46,6 +50,7 @@
 + (void)_registerDefaultModules
 {
     [self registerModule:@"dom" withClass:NSClassFromString(@"WXDomModule")];
+    [self registerModule:@"locale" withClass:NSClassFromString(@"WXLocaleModule")];
     [self registerModule:@"navigator" withClass:NSClassFromString(@"WXNavigatorModule")];
     [self registerModule:@"stream" withClass:NSClassFromString(@"WXStreamModule")];
     [self registerModule:@"animation" withClass:NSClassFromString(@"WXAnimationModule")];
@@ -77,6 +82,17 @@
 
 # pragma mark Component Register
 
++ (void)_registerAffineTypes
+{
+    /* register weex core types that should match RenderList or RenderScroller.
+     "list" and "waterfall" must be registered before "scroller" because "WXListComponent" and "WXRecyclerComponent"
+     are both subclasses of "WXScrollerComponent".
+     */
+    [WXComponentFactory registerBaseType:@"list" withClass:NSClassFromString(@"WXListComponent")];
+    [WXComponentFactory registerBaseType:@"waterfall" withClass:NSClassFromString(@"WXRecyclerComponent")];
+    [WXComponentFactory registerBaseType:@"scroller" withClass:NSClassFromString(@"WXScrollerComponent")];
+}
+
 // register some default components when the engine initializes.
 + (void)_registerDefaultComponents
 {
@@ -84,6 +100,8 @@
     [self registerComponent:@"div" withClass:NSClassFromString(@"WXComponent") withProperties:nil];
     [self registerComponent:@"text" withClass:NSClassFromString(@"WXTextComponent") withProperties:nil];
     [self registerComponent:@"image" withClass:NSClassFromString(@"WXImageComponent") withProperties:nil];
+    [self registerComponent:@"richtext" withClass:NSClassFromString(@"WXRichText") withProperties:nil];
+    
     [self registerComponent:@"scroller" withClass:NSClassFromString(@"WXScrollerComponent") withProperties:nil];
     [self registerComponent:@"list" withClass:NSClassFromString(@"WXListComponent") withProperties:nil];
     [self registerComponent:@"recycler" withClass:NSClassFromString(@"WXRecyclerComponent") withProperties:nil];
@@ -99,7 +117,7 @@
     [self registerComponent:@"input" withClass:NSClassFromString(@"WXTextInputComponent")];
     [self registerComponent:@"video" withClass:NSClassFromString(@"WXVideoComponent")];
     [self registerComponent:@"indicator" withClass:NSClassFromString(@"WXIndicatorComponent")];
-    [self registerComponent:@"slider" withClass:NSClassFromString(@"WXSliderComponent")];
+    [self registerComponent:@"slider" withClass:NSClassFromString(@"WXCycleSliderComponent")];
     [self registerComponent:@"cycleslider" withClass:NSClassFromString(@"WXCycleSliderComponent")];
     [self registerComponent:@"web" withClass:NSClassFromString(@"WXWebComponent")];
     [self registerComponent:@"loading" withClass:NSClassFromString(@"WXLoadingComponent")];
@@ -112,6 +130,8 @@
     [self registerComponent:@"recycle-list" withClass:NSClassFromString(@"WXRecycleListComponent")];
     [self registerComponent:@"cell-slot" withClass:NSClassFromString(@"WXCellSlotComponent") withProperties: @{@"append":@"tree", @"isTemplate":@YES}];
     
+    // other non-default components should be checked with affine-base types.
+    [self _registerAffineTypes];
 }
 
 + (void)registerComponent:(NSString *)name withClass:(Class)clazz
@@ -148,14 +168,25 @@
 
 
 # pragma mark Service Register
+
 + (void)registerService:(NSString *)name withScript:(NSString *)serviceScript withOptions:(NSDictionary *)options
 {
-    [[WXSDKManager bridgeMgr] registerService:name withService:serviceScript withOptions:options];
+    [[WXSDKManager bridgeMgr] registerService:name withService:serviceScript withOptions:options completion:nil];
 }
 
-+ (void)registerService:(NSString *)name withScriptUrl:(NSURL *)serviceScriptUrl WithOptions:(NSDictionary *)options
++ (void)registerService:(NSString *)name withScript:(NSString *)serviceScript withOptions:(NSDictionary *)options completion:(void(^)(BOOL result))completion
 {
-    [[WXSDKManager bridgeMgr] registerService:name withServiceUrl:serviceScriptUrl withOptions:options];
+    [[WXSDKManager bridgeMgr] registerService:name withService:serviceScript withOptions:options completion:completion];
+}
+
++ (void)registerService:(NSString *)name withScriptUrl:(NSURL *)serviceScriptUrl withOptions:(NSDictionary *)options
+{
+    [[WXSDKManager bridgeMgr] registerService:name withServiceUrl:serviceScriptUrl withOptions:options completion:nil];
+}
+
++ (void)registerService:(NSString *)name withScriptUrl:(NSURL *)serviceScriptUrl withOptions:(NSDictionary *)options completion:(void(^)(BOOL result))completion
+{
+    [[WXSDKManager bridgeMgr] registerService:name withServiceUrl:serviceScriptUrl withOptions:options completion:completion];
 }
 
 + (void)unregisterService:(NSString *)name
@@ -171,7 +202,7 @@
     [self registerHandler:[WXResourceRequestHandlerDefaultImpl new] withProtocol:@protocol(WXResourceRequestHandler)];
     [self registerHandler:[WXNavigationDefaultImpl new] withProtocol:@protocol(WXNavigationProtocol)];
     [self registerHandler:[WXURLRewriteDefaultImpl new] withProtocol:@protocol(WXURLRewriteProtocol)];
-    
+    [self registerHandler:[WXJSFrameworkLoadDefaultImpl new] withProtocol:@protocol(WXJSFrameworkLoadProtocol)];
 }
 
 + (void)registerHandler:(id)handler withProtocol:(Protocol *)protocol
@@ -192,8 +223,11 @@
 
 + (void)initSDKEnvironment
 {
-    
-    NSString *filePath = [[NSBundle bundleForClass:self] pathForResource:@"native-bundle-main" ofType:@"js"];
+    NSString *fileName = @"weex-main-jsfm";
+    NSString *filePath = [[NSBundle bundleForClass:self] pathForResource:fileName ofType:@"js"];
+	if (filePath == nil) {
+		filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"js"];
+	}
     NSString *script = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     [WXSDKEngine initSDKEnvironment:script];
     
@@ -225,12 +259,13 @@
 
 + (void)initSDKEnvironment:(NSString *)script
 {
-    
     WX_MONITOR_PERF_START(WXPTInitalize)
     WX_MONITOR_PERF_START(WXPTInitalizeSync)
     
     if (!script || script.length <= 0) {
-        WX_MONITOR_FAIL(WXMTJSFramework, WX_ERR_JSFRAMEWORK_LOAD, @"framework loading is failure!");
+        NSMutableString *errMsg = [NSMutableString stringWithFormat:@"[WX_KEY_EXCEPTION_SDK_INIT_JSFM_INIT_FAILED] script don't exist:%@",script];
+        [WXExceptionUtils commitCriticalExceptionRT:@"WX_KEY_EXCEPTION_SDK_INIT" errCode:[NSString stringWithFormat:@"%d", WX_KEY_EXCEPTION_SDK_INIT] function:@"initSDKEnvironment" exception:errMsg extParams:nil];
+        WX_MONITOR_FAIL(WXMTJSFramework, WX_ERR_JSFRAMEWORK_LOAD, errMsg);
         return;
     }
     static dispatch_once_t onceToken;
@@ -264,15 +299,21 @@
 }
 
 
-static NSDictionary *_customEnvironment;
+static NSDictionary *_customEnvironment = nil;
 + (void)setCustomEnvironment:(NSDictionary *)environment
 {
-    _customEnvironment = environment;
+    @synchronized (self) {
+        _customEnvironment = environment;
+    }
 }
 
 + (NSDictionary *)customEnvironment
 {
-    return _customEnvironment;
+    NSDictionary* result = nil;
+    @synchronized (self) {
+        result = _customEnvironment;
+    }
+    return result;
 }
 
 # pragma mark Debug
@@ -285,7 +326,11 @@ static NSDictionary *_customEnvironment;
 
 + (void)restart
 {
-    NSString *filePath = [[NSBundle bundleForClass:self] pathForResource:@"native-bundle-main" ofType:@"js"];
+    NSString *fileName = @"weex-main-jsfm";
+    NSString *filePath = [[NSBundle bundleForClass:self] pathForResource:fileName ofType:@"js"];
+	if (filePath == nil) {
+		filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"js"];
+	}
     NSString *script = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     [self restartWithScript:script];
 }
@@ -327,17 +372,15 @@ static NSDictionary *_customEnvironment;
 + (void)_originalRegisterComponents:(NSDictionary *)components {
     NSMutableDictionary * mutableComponents = [components mutableCopy];
     void (^componentBlock)(id, id, BOOL *) = ^(id mKey, id mObj, BOOL * mStop) {
-        
         NSString *name = mObj[@"name"];
         NSString *componentClass = mObj[@"clazz"];
         NSDictionary *pros = nil;
         if (mObj[@"pros"]) {
-            pros = mObj[@""];
+            pros = mObj[@"pros"];
         }
         [self registerComponent:name withClass:NSClassFromString(componentClass) withProperties:pros];
     };
     [mutableComponents enumerateKeysAndObjectsUsingBlock:componentBlock];
-    
 }
 
 + (void)_originalRegisterModules:(NSDictionary *)modules {
