@@ -3,7 +3,7 @@
                :show="show" 
                @wxcPopupOverlayClicked="popupOverlayBottomClick" 
                pos="bottom" 
-               height="360">
+               :height="popupHeight">
         <input autofocus='true'
                ref="pwdinput" 
                type="number" 
@@ -11,7 +11,8 @@
                :max-length='maxlength'
                @input="onInput"
                @change="onChange"
-               style="width:0;height:0"/>
+               @keyboard="keyboard"
+               style="width:1;height:0"/>
         <div class="title">
             <wxc-icon name="close" 
             :icon-style="{color:'#666666',fontWeight: 'bolder',padding:'20px'}"
@@ -30,9 +31,9 @@
 
 <script>
 import { WxcPopup, WxcIcon } from "weex-ui";
+import navigation from "@/base-superior/components/NavigationBar.vue";
 
 const modal = weex.requireModule("modal");
-const navigator = weex.requireModule("navigator");
 
 export default {
     components: { WxcPopup, WxcIcon },
@@ -56,6 +57,8 @@ export default {
     },
     data() {
         return {
+            isAndroid:WXEnvironment.platform === 'android',
+            popupHeight:360,
             maxArray:[],
             passwordText:'',
         };
@@ -88,9 +91,22 @@ export default {
         onChange:function(event){
             this.passwordText = '';
         },
+        //andriod键盘弹出隐藏事件,ios该事件存在问题
+        keyboard:function(e){
+            //ios在该方法中使用modal.alert组件会引起死循环
+            // modal.alert({message:"keyboard："+JSON.stringify(e)})
+            console.log("keyboard："+JSON.stringify(e));
+            if(this.isAndroid){
+                if(e.isShow){
+                    this.popupHeight = 300 + Number(e.keyboardSize);
+                }else{
+                    this.show = false;
+                }
+            }
+        },
         //忘记密码点击事件
         forgetpwdClick:function(){
-            navigator.push({url:'balance_setPayPwd.html',title:'重置密码'},event =>{});
+            navigation.push({url:'balance_setPayPwd.html',title:'重置密码'},event =>{});
         },
     }
 };
