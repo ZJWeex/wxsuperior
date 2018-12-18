@@ -4,6 +4,7 @@
         <wxc-tab-page ref="wxc-tab-page"
                     :tab-titles="tabTitles"
                     :tab-styles="tabStyles"
+                    :tab-page-height="tabPageHeight"
                     :needSlider='true'
                     @wxcTabPageCurrentTabSelected="wxcTabPageCurrentTabSelected">
                     <div v-for="(item, index) in tabTitles" :key="index">
@@ -26,18 +27,18 @@ import navigation from "@/base-superior/components/NavigationBar.vue";
 const modal = weex.requireModule('modal');
 
 function getPageHeight () {
-            const { env } = weex.config;
-            var navHeight =  0;
-            if(Utils.env.isIOS()){
-                navHeight = 128;
-                if(Utils.env.isIPhoneX()){
-                   navHeight = 176; 
-                }
-            }else if(Utils.env.isAndroid()){
-                navHeight = 168;
-            }
-            return env.deviceHeight / env.deviceWidth * 750 - navHeight;
-        }
+      const { env } = weex.config;
+    var navHeight = 0;
+    var statusBarH = 0; 
+    if(env.platform.toLowerCase() === 'ios'){
+        navHeight = Utils.env.isIPhoneX() ? 176 : 128*375*env.scale/env.deviceWidth;
+        statusBarH = Utils.env.isIPhoneX() ? 10 : statusBarH;
+    } else if(env.platform.toLowerCase() === 'android') {
+        navHeight = 88;
+        statusBarH = 50; 
+    }
+    return env.deviceHeight / env.deviceWidth * 750 - navHeight - statusBarH;
+}
 
 export default {
     components: {navigation, WxcTabPage, Coupon },

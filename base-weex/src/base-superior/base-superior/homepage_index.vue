@@ -6,6 +6,7 @@
         <wxc-tab-page ref="wxc-tab-page"
                 :tab-titles="tabTitles"
                 :tab-styles="tabStyles"
+                :tab-page-height="tabPageHeight"
                 :needSlider='true'
                 @wxcTabPageCurrentTabSelected="wxcTabPageCurrentTabSelected">
                 <div v-for="(item, index) in data" :key="index">
@@ -37,14 +38,17 @@ const storage = weex.requireModule("storage");
 function getPageHeight () {
     const { env } = weex.config;
     var navHeight = 0;
-    var tabbarH = 98; 
+    var tabbarH = 98;
+    var statusBarH = 0;  
     if(env.platform.toLowerCase() === 'ios'){
-        navHeight = Utils.env.isIPhoneX() ? 176 : 128;
-        tabbarH = Utils.env.isIPhoneX() ? 132:tabbarH;
+        navHeight = Utils.env.isIPhoneX() ? 176 : 128*375*env.scale/env.deviceWidth;
+        tabbarH = Utils.env.isIPhoneX() ? 166 : tabbarH;
     }else if(env.platform.toLowerCase() === 'android') {
-        navHeight = 168;
+        navHeight = 88;
+        tabbarH = 100;
+        statusBarH = 50; 
     }
-    return env.deviceHeight / env.deviceWidth * 750 - navHeight - tabbarH;
+    return env.deviceHeight / env.deviceWidth * 750 - navHeight - tabbarH - statusBarH;
 }
 export default {
     components: { navigation, WxcTabPage, ClassList, HotPage, privacyAlert },

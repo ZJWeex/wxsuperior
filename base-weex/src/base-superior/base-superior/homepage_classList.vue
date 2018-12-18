@@ -1,7 +1,10 @@
 <!-- 优选分类数据  -->
 <template>
 <div class="wrapper">
-    <scroller class="in-scroller" alwaysScrollableVertical='true' scroll-direction="vertical">
+    <scroller class="in-scroller" alwaysScrollableVertical='true' 
+            scroll-direction="vertical" 
+            loadmoreoffset="10" 
+            @loadmore="loadmore">
         <refresh class="refresh" @refresh="onrefresh" 
                 :display="refreshing ? 'show' : 'hide'" 
                 @pullingdown="onpullingdown">
@@ -260,8 +263,16 @@ export default {
                 this.loadinging = true
                 this.page = this.page + 1;
                 this.loadData();
+            } 
+        },
+        //scroll滚动到底部时触发该事件
+        loadmore:function(e){
+            const self = this;
+            if(WXEnvironment.platform == 'android'){
+                self.onloading(e);
+                 //loadmore重置函数
+                e.target.resetLoadmore();
             }
-            
         },
      }
 

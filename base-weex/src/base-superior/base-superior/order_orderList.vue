@@ -436,6 +436,7 @@ export default {
     justify-content: space-between;
     border-bottom-color: #dddddd;
     border-bottom-width: 2px;
+    padding-bottom: 24px;
 }
 .content-bottom {
     flex-direction: row;
