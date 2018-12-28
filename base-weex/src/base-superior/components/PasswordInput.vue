@@ -1,5 +1,6 @@
 <template>
-    <wxc-popup popup-color="#f2f2f2" 
+    <wxc-popup popup-color="#f2f2f2"
+               ref="wxcPopup" 
                :show="show" 
                @wxcPopupOverlayClicked="popupOverlayBottomClick" 
                pos="bottom" 
@@ -93,15 +94,23 @@ export default {
         },
         //andriod键盘弹出隐藏事件,ios该事件存在问题
         keyboard:function(e){
-            //ios在该方法中使用modal.alert组件会引起死循环
-            // modal.alert({message:"keyboard："+JSON.stringify(e)})
-            console.log("keyboard："+JSON.stringify(e));
-            if(this.isAndroid){
+            const self = this;
+            if(self.isAndroid){
+                //ios在该方法中使用modal.alert组件会引起死循环
+                // modal.alert({message:"keyboard："+JSON.stringify(e)})
                 if(e.isShow){
-                    this.popupHeight = 300 + Number(e.keyboardSize);
+                    //android的weexsdk0.19以下没有keyboardSize参数
+                    if(e.keyboardSize){
+                        self.popupHeight = 300 //+ Number(e.keyboardSize);
+                    }else{
+                        self.popupHeight = 300+616
+                    }
+                    
                 }else{
-                    this.show = false;
+                    self.$refs.wxcPopup.hide();
                 }
+            }else{
+                console.log("keyboard："+JSON.stringify(e))
             }
         },
         //忘记密码点击事件

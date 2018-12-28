@@ -146,10 +146,18 @@ function postRequest(url, params, success, failure) {
     }, function(ret) {
         if (!ret.ok) {
             console.log('请求失败\n', JSON.stringify(ret))
-            if (ret.data.indexOf('offline') != -1) {
-                failure('当前网络不可用' + url);
+            if (WXEnvironment.platform === 'android') {
+                if (ret.statusText.toLowerCase().indexOf('err_connect') != -1) {
+                    failure('当前网络不可用');
+                } else {
+                    failure('请求失败');
+                }
             } else {
-                failure('请求失败' + url);
+                if (ret.data.indexOf('offline') != -1) {
+                    failure('当前网络不可用');
+                } else {
+                    failure('请求失败');
+                }
             }
         } else {
             var jsonString = JSON.stringify(ret.data);

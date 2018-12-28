@@ -13,7 +13,8 @@
                     <div class="div-code">
                         <input type="number" class="input-code" placeholder="输入验证码" max-length=6 maxlength=6 ref="code" @change="codechange" @input="codeinput" />
                     </div>
-                    <text class="get-code" :style="{'background-color': countDowningEnable ? '#ea333d':'#c9c9c9' }" @click="getVerCode">{{ countDown }}</text>
+                    <text v-if="countDowningEnable" class="get-code" :style="{'background-color': '#ea333d' }" @click="getVerCode">{{ countDown }}</text>
+                    <text v-else class="get-code" :style="{'background-color': '#c9c9c9' }">{{ countDown }}</text>
                 </div>
             </div>
             <div class="prcol-info">
@@ -109,7 +110,9 @@ export default {
         numberinput: function(event) {
             this.phoneNumber = event.value;
             if (this.isPhoneAvailable(this.phoneNumber)) {
-                this.countDowningEnable = true;
+                if(this.countDown.indexOf('验证码') != -1){
+                    this.countDowningEnable = true;
+                }
                 this.isPhone = true;
             } else {
                 this.countDowningEnable = false;
