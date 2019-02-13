@@ -1,6 +1,6 @@
 <template>
     <div class='wrapper'>
-        <navigation :title="title" @wxcMinibarLeftButtonClicked="goBack"/>
+        <navigation :title="title" @wxcMinibarLeftButtonClicked="goBack" :use-default-return='false'/>
         <div class="web">
             <web ref="webview" class="web" :src="url" 
                 @pagestart="onPageStart" 
@@ -42,13 +42,14 @@ export default {
     methods: {
         //返回刷新
         goBack: function() {
+            /*
             if(this.canGoBack == true){
-                var webElement = this.$el('webview');
                 var webview = weex.requireModule('webview');
-                webview.goBack(webElement.ref);
+                webview.goBack(this.$refs.webview);
             }else{
                 navigation.pop({pop:true},event=>{});
-            } 
+            }*/ 
+            navigation.pop({pop:true},event=>{});
         },
         
         onPageStart: function(e) {
