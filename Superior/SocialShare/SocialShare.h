@@ -9,6 +9,26 @@
 #import <Foundation/Foundation.h>
 #import "SocialShareMessage.h"
 
+@interface WEEXSocialShare : tHybridKitModule
+
+
+/**
+ 分享信息
+ 
+ @param platform 分享平台：0.微信朋友圈 1.微信好友 2.QQ好友 3.QQ空间
+ @param title 主标题
+ @param subTitle 副标题
+ @param thumbnail 缩略图URL
+ @param shareLink 待分享链接
+ */
+- (void)sendMessage:(NSString *)platform
+              title:(NSString *)title
+           subTitle:(NSString *)subTitle
+          thumbnail:(NSString *)thumbnail
+          shareLink:(NSString *)shareLink;
+
+
+@end
 
 
 @interface SocialShare : NSObject
@@ -24,3 +44,5 @@
 
 + (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options;
 @end
+
+

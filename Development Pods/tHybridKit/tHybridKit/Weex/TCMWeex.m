@@ -13,6 +13,7 @@
 #import "tHybridModulesLoader.h"
 #import "thybridNavigationDefaultImpl.h"
 #import "UIViewController+tHybridWeex.h"
+#import "NSURL+tHybrid.h"
 
 @implementation tHybridKit
 BOOL _Thybrid_Kit_Network_Working_ = NO;
@@ -22,12 +23,16 @@ BOOL _Thybrid_Kit_Iphone_X_ = NO;
 
     [self initDeviceEnvironment];
 
+#if DEBUG
     [WXLog setLogLevel:WXLogLevelLog];
+#else
+    [WXLog setLogLevel:WXLogLevelOff];
+#endif
 
     [WXAppConfiguration setAppGroup:@"Taocaimall"];
-    [WXAppConfiguration setAppName:[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleNameKey]];
+    [WXAppConfiguration setAppName:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"TCMStatisticsClientName"]];
 
-    [WXAppConfiguration setAppVersion:[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey]];
+    [WXAppConfiguration setAppVersion:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
 
     //初始化环境
     [WXSDKEngine initSDKEnvironment];
@@ -53,11 +58,41 @@ BOOL _Thybrid_Kit_Iphone_X_ = NO;
 
 
 + (void)launchingWeex:(NSString *)networkEnvironment{
-    [self launchingWeex];
     //自定义网络环境变量
+    [self setEnvironment:networkEnvironment];
+
+    [self launchingWeex];
+}
+
++ (void)setEnvironment:(NSString *)networkEnvironment{
     if (networkEnvironment) {
         [WXSDKEngine setCustomEnvironment:@{@"netEnv":networkEnvironment}];
     }
+}
+
++ (void)resetEnvironment:(NSString *)networkEnvironment{
+    if (networkEnvironment) {
+        [self setEnvironment:networkEnvironment];
+        [WXSDKEngine restart];
+    }
+}
+
++ (void)setCustomOption:(NSString *)key value:(NSString *)value{
+    NSDictionary *opt = self.customOption;
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    if (opt) {
+        [dic addEntriesFromDictionary:opt];
+    }
+    [dic setValue:value forKey:key];
+    [WXSDKEngine setCustomEnvironment:dic];
+}
+
++ (NSDictionary *)customOption{
+    return [WXSDKEngine customEnvironment];
+}
+
++ (void)restart{
+    [WXSDKEngine restart];
 }
 
 + (BOOL)Thybrid_Kit_Iphone_X{

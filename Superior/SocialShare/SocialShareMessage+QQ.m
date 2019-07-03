@@ -7,8 +7,9 @@
 //
 
 #import "SocialShareMessage+QQ.h"
-#import <QQSDK/TencentOpenAPI/QQApiInterface.h>
-#import <QQSDK/TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+
+#import <TencentOpenAPI/TencentOAuth.h>
 
 @implementation SocialShareMessage (QQ)
 
@@ -50,7 +51,7 @@
             break;
     }
     SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:obj];
-
+    
     return req;
 }
 

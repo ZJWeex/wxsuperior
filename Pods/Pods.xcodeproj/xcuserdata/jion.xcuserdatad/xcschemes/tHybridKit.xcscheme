@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1020"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E442D385FA55793FD54FAE1BD72F8E4F"
+               BlueprintIdentifier = "61EB0CD9BFD712A5425AA10083D009F1"
+               BuildableName = "libtHybridKit.a"
                BlueprintName = "tHybridKit"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "libtHybridKit.a">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

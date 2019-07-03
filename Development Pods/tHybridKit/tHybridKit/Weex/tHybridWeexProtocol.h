@@ -6,6 +6,7 @@
 //
 
 #import "WXSDKInstance.h"
+#import "thybridNavigationOption.h"
 
 typedef NS_OPTIONS(NSUInteger, thybridRenderOption) {
     thybridRenderOptionUnknown = 1 << 0,
@@ -29,6 +30,9 @@ typedef NS_OPTIONS(NSUInteger, thybridRenderOption) {
 @property (nonatomic, strong) __kindof NSObject *options;
 @property (nonatomic, assign) thybridRenderOption renderOption;
 @property (nonatomic, weak) UIView *contentView;
+
+/** 导航栏配置 */
+@property (nonatomic, strong) thybridNavigationOption *noption;
 
 @required
 - (void)onCreate:(UIView *)view;

@@ -109,6 +109,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>TCMStatisticsClientName</key>
+	<string>superior</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

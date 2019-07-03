@@ -11,6 +11,7 @@
 #import "tHybridSpringReceiveProtocol.h"
 #import "tHybridWeexProtocol.h"
 #import "UIView+GDViewFromXIB.h"
+#import "thybridNavigationOption.h"
 
 @interface thybridViewController : UIViewController<tHybridWeexProtocol>
 
@@ -40,10 +41,10 @@
 - (void)refreshWeexInstance;
 
 
-
+- (void)springWithOption:(thybridNavigationOption *)option;
 - (void)springWithURL:(NSString *)url option:(NSDictionary *)option;
 
-- (void)pop:(NSDictionary *)option;
+- (void)pop:(thybridNavigationOption *)option;
 
 - (void)resetNavigationBar;
 

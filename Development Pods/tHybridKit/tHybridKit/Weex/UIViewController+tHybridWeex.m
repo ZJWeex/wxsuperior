@@ -35,9 +35,11 @@
 @synthesize options;
 @synthesize contentView;
 @synthesize renderOption;
+@synthesize noption;
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    self.view.backgroundColor = UIColor.whiteColor;
     if (self.weexUrl) {
         [self renderWeex];
     }
@@ -53,6 +55,7 @@
     }
     [self.weexInstance fireGlobalEvent:@"viewappear" params:nil];
     [[WXSDKManager bridgeMgr] fireEvent:self.weexInstance.instanceId ref:WX_SDK_ROOT_REF type:@"viewappear" params:nil domChanges:nil];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self.navigationController;
 }
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
@@ -65,20 +68,20 @@
     }
     //加载完成
     self.privateContentView.loadingStatus = THYBRID_LOADING_STATUS_RENDER_FINISH;
-    NSLog(@"renderOption:%ld", self.renderOption);
 }
 - (void)onJSRuntimeException:(WXJSExceptionInfo *)jsException{
     if (jsException.errorCode.integerValue == -2013) {
         self.privateContentView.loadingStatus = THYBRID_LOADING_STATUS_FILE_EXECUTION_FAILED;
         [self.createView removeFromSuperview];
     }
-    NSLog(@"renderOption:%ld", self.renderOption);
 }
 - (void)onFailed:(NSError *)error{
     if (error.code == -2205) {
         self.privateContentView.loadingStatus = THYBRID_LOADING_STATUS_NETWORK_ERROR;
     } else if(error.code == -2202){
         self.privateContentView.loadingStatus = THYBRID_LOADING_STATUS_LOAD_FAILED;
+    } else if (error.code == 404) {
+        self.privateContentView.loadingStatus = THYBRID_LOADING_STATUS_NO_FILE;
     }
 }
 
@@ -106,7 +109,7 @@
 
 - (thybridBackgroundView *)privateContentView{
     if (!_privateContentView) {
-        thybridBackgroundView *backgroundView = [[thybridBackgroundView alloc] init];
+        thybridBackgroundView *backgroundView = [thybridBackgroundView objectWithHandler:self];
         backgroundView.tag = THYBRID_BACKGROUND_VIEW_TAG;
 
         [self.view addSubview:backgroundView];
@@ -114,40 +117,71 @@
             make.left.top.right.bottom.mas_offset(0);
         }];
 
-        if (!self.tabBarController) {
-            UIImage *image = [[UIImage imageNamed:@"supermarkets_fh"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:image style:(UIBarButtonItemStylePlain) target:self action:@selector(pop:)];
+        UITabBarController<UIGestureRecognizerDelegate> *tabBarController = (id)self.tabBarController;
+        if (!tabBarController || (![tabBarController.viewControllers indexOfObject:self] && [tabBarController respondsToSelector:@selector(gestureRecognizerShouldBegin:)] && [tabBarController gestureRecognizerShouldBegin:tabBarController.navigationController.interactivePopGestureRecognizer])) {
+
+            UIImage *image = nil;
+            NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+            NSURL *url = [bundle URLForResource:@"tHybridKit" withExtension:@"bundle"];
+            if (url) {
+                NSBundle *targetBundle = [NSBundle bundleWithURL:url];
+                image = [UIImage imageNamed:@"navigation_goback.png" inBundle:targetBundle compatibleWithTraitCollection:nil];
+                image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            }
+
+            UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:image style:(UIBarButtonItemStylePlain) target:self action:@selector(leftBarButtonAction)];
             backgroundView.navigationItem.leftBarButtonItem = item;
         }
 
         /*
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Update" style:(UIBarButtonItemStylePlain) target:self action:@selector(rightBarButtonAction)];
-        backgroundView.navigationItem.rightBarButtonItem = item;
+         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Update" style:(UIBarButtonItemStylePlain) target:self action:@selector(rightBarButtonAction)];
+         backgroundView.navigationItem.rightBarButtonItem = item;
          */
 
         backgroundView.handler = self;
         _privateContentView = backgroundView;
     }
+    [self.view addSubview:_privateContentView];
 
     return _privateContentView;
+}
+- (void)leftBarButtonAction{
+    thybridNavigationOption *option = [[thybridNavigationOption alloc] init];
+
+    [self pop:option];
 }
 
 - (void)rightBarButtonAction{
     [self renderWeex];
 }
+- (void)dealloc{
+    [self.weexInstance destroyInstance];
+}
 
 
 @end
 
 
-@interface UIViewController ()<tHybridWeexProtocol,UIGestureRecognizerDelegate>
+@interface UIViewController ()<tHybridWeexProtocol>
 
 @property (nonatomic, weak, readonly) thybridBackgroundView *privateContentView;
 
+@property (nonatomic, assign) BOOL pop;
 
 @end
 
 @implementation UIViewController (tHybridWeex)
+- (void)springWithURL:(NSString *)url option:(NSDictionary *)option{
+    
+}
+static void* kUIViewController_Pop = &kUIViewController_Pop;
+- (void)setPop:(BOOL)pop{
+    objc_setAssociatedObject(self, kUIViewController_Pop, @(pop), OBJC_ASSOCIATION_COPY);
+}
+- (BOOL)pop{
+    NSNumber *obj = objc_getAssociatedObject(self, kUIViewController_Pop);
+    return obj.boolValue;
+}
 
 - (void)renderWeexWithURL:(NSURL *)url{
     self.weexUrl = url;
@@ -157,7 +191,6 @@
     [self renderWeexWithOptions:self.options];
 }
 - (void)rendererWeex{
-    NSLog(@"renderOption:%ld-renderOption:%ld", thybridRenderOptionOnFail, thybridRenderOptionExecutionFail);
     if (self.renderOption & thybridRenderOptionOnFail ||
         self.renderOption & thybridRenderOptionExecutionFail){
         [self renderWeex];
@@ -165,7 +198,7 @@
 }
 
 
-- (void)renderWeexWithOptions:(NSObject *)options{
+- (void)renderWeexWithOptions:(thybridNavigationOption *)options{
     [self.weexInstance destroyInstance];
 
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -218,7 +251,12 @@
     NSMutableDictionary *GlobalEvent = [NSMutableDictionary dictionary];
     [GlobalEvent setValue:tHybridKitModule.GlobalEventRefreshInstance forKey:@"GlobalEventRefreshInstance"];
 
-    [self.weexInstance renderWithURL:self.weexUrl options:@{@"GlobalEvent":GlobalEvent, @"title": self.title?:@""} data:nil];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:GlobalEvent, @"GlobalEvent", nil];
+    [dic setValue:self.title forKey:@"title"];
+//    [dic setValue:options.titleColorHex forKey:@"titleColor"];
+//    [dic setValue:options.barColorHex forKey:@"barColor"];
+   
+    [self.weexInstance renderWithURL:self.weexUrl options: dic data:nil];
     self.options = options;
 }
 
@@ -227,98 +265,126 @@
 }
 
 
+- (void)springWithOption:(thybridNavigationOption *)option{
+
+    UIViewController *contain = self;
+    if (option.selectedIndex != thybridNavigationOptionTabUnkonw) {
+        UITabBarController *tabBarViewController = self.tabBarController;
+        if (!tabBarViewController) {
+            tabBarViewController = self.navigationController.viewControllers.firstObject;
+        }
+        if (option.selectedIndex < tabBarViewController.viewControllers.count) {
+            contain = [tabBarViewController.viewControllers objectAtIndex:option.selectedIndex];
+            [tabBarViewController setSelectedViewController:contain];
+        }
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+
+    if (!option.javascriptUrl) {
+        return;
+    }
+
+    thybridViewController *VC = [[thybridViewController alloc] init];
+    VC.view.backgroundColor = [UIColor whiteColor];
+    VC.noption = option;
+
+    if([self respondsToSelector:@selector(weexUrl)]) {
+        [option resetWithCurrentJSUrl:self.weexUrl];
+    }
+
+    VC.weexUrl = [NSURL weexUrlWithFilePath:option.javascriptUrl];
+    VC.options = option;
+    VC.title = option.title;
+
+    [VC resetNavigationBar];
+    [VC renderWeex];
+
+
+    if ([contain isKindOfClass:UINavigationController.class]) {
+        [(UINavigationController *)contain pushViewController:VC animated:option.animated];
+    } else {
+        if (contain.tabBarController) {
+            contain.tabBarController.pop = option.pop;
+        } else {
+            contain.pop = option.pop;
+        }
+
+        UINavigationController *navigation = contain.navigationController;
+        [navigation pushViewController:VC animated:option.animated];
+
+        if (option.replace) {
+            NSMutableArray *array = [navigation.viewControllers mutableCopy];
+            [array removeObjectAtIndex:array.count-2];
+            [navigation setViewControllers:array animated:YES];
+        }
+        contain.navigationController.interactivePopGestureRecognizer.delegate = contain.navigationController;
+    }
+}
 
 
 /**
- <#Description#>
+ 返回堆栈中的某个VC
 
- @param url <#url description#>
- @param option <#option description#>
+ @param option pop参数{
+
+ }
  */
-- (void)springWithURL:(NSString *)url option:(NSDictionary *)option{
-    if (!url.length) {
-        return ;
-    }
-
-    //仅支持.js文件
-    url = [url stringByReplacingOccurrencesOfString:@".html" withString:@".js"];
-
-    //过滤正常URL
-    if (![url hasPrefix:@"http"]) {
-        NSString *preURL = @"";
-        //过滤非绝对路径[WEEX以‘/’开始为绝对路径]
-        if (![url hasPrefix:@"/"]) {
-
-            //获取基地址
-            static NSString *baseURL = nil;
-            if (!baseURL) {
-                baseURL = [NSURL weexUrlWithFilePath:@""].absoluteString;
-            }
-            NSString *currentURLStr = self.weexUrl.absoluteString;
-            currentURLStr = [currentURLStr stringByReplacingOccurrencesOfString:baseURL withString:@""];
-            NSRange range = [currentURLStr rangeOfString:@"/" options:(NSBackwardsSearch)];
-
-            //获取当前目录
-            NSString *currentPath = nil;
-            if (range.location) {
-                currentPath = [currentURLStr substringWithRange:NSMakeRange(0, range.location+1)];
-            }
-
-            //逐级目录返回
-            NSRange tagRange = NSMakeRange(0, url.length);
-            do {
-                tagRange = [url rangeOfString:@"../" options:(NSCaseInsensitiveSearch) range:NSMakeRange(0, url.length)];
-                if (tagRange.length) {
-
-                    NSRange range = [currentPath rangeOfString:@"/" options:(NSBackwardsSearch) range:NSMakeRange(0, currentPath.length-1)];
-                    currentPath = [currentURLStr substringWithRange:NSMakeRange(0, range.location+1)];
-
-                    url = [url substringFromIndex:tagRange.length];
-
-                    NSLog(@"WEEX_URL:%@%@", currentPath, url);
-                }
-            } while (tagRange.length);
-            preURL = currentPath;
-        }
-        url = [NSString stringWithFormat:@"%@%@", preURL, url];
-        NSLog(@"%@", url);
-        NSLog(@"%@", url);
-    }
-
-    [self performBlock:^{
-        UIViewController *VC = [[thybridViewController alloc] init];
-        VC.view.backgroundColor = [UIColor whiteColor];
-        VC.weexUrl = [NSURL weexUrlWithFilePath:url];
-        VC.title = [option valueForKey:@"title"] ? : @"";
-        [VC resetNavigationBar];
-
-        [VC renderWeexWithOptions:option];
-
-        UIViewController *contain = self;
-        NSString *switchTab = [option valueForKey:@"switchTab"];
-        if (switchTab) {
-            NSUInteger index = switchTab.integerValue;
-            UITabBarController *tabBarViewController = self.tabBarController;
-            if (index >= 0 && index < tabBarViewController.viewControllers.count) {
-                contain = [tabBarViewController.viewControllers objectAtIndex:index];
-                [tabBarViewController setSelectedIndex:index];
-            }
-        }
-        
-        if ([contain isKindOfClass:UINavigationController.class]) {
-            ((UINavigationController *)contain).interactivePopGestureRecognizer.delegate = self;
-            [(UINavigationController *)contain pushViewController:VC animated:YES];
-        } else {
-            self.navigationController.interactivePopGestureRecognizer.delegate = self;
-            [contain.navigationController pushViewController:VC animated:YES];
-        }
-    }];
-}
-
-- (void)pop:(NSDictionary *)option{
-    [self performBlock:^{
+- (void)pop:(thybridNavigationOption *)option{
+    if (!option || ![option isKindOfClass:thybridNavigationOption.class]) {
         [self.navigationController popViewControllerAnimated:YES];
-    }];
+        return;
+    }
+
+
+    if (option.popToRoot) {
+        UINavigationController *navigation = self.navigationController;
+        UIViewController *rootViewController = navigation.viewControllers.firstObject;
+        if ([rootViewController isKindOfClass:thybridViewController.class] && ![[(thybridViewController *)rootViewController privateContentView].title isEqualToString:@"淘菜猫优选商城"]) {
+            if ([rootViewController respondsToSelector:@selector(HomePage)]) {
+                [rootViewController performSelector:@selector(HomePage)];
+                return;
+            }
+        }
+
+        [self.navigationController popToRootViewControllerAnimated:option.animated];
+        return;
+    }
+
+
+    if ((self.presentedViewController || self.presentingViewController) && self.navigationController.childViewControllers.count == 1) {
+        CATransition* transition = [CATransition animation];
+        transition.duration = 0.35;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+        transition.type = kCATransitionPush;
+        transition.subtype = kCATransitionFromLeft;
+
+        [self.view.window.layer addAnimation:transition forKey:kCATransition];
+
+        [self dismissViewControllerAnimated:NO completion:^{
+
+        }];
+        return;
+    }
+
+
+    if (option.pop) {
+        NSArray<UIViewController *> *array = self.navigationController.viewControllers;
+        UIViewController *controller = nil;
+        for (NSInteger index = array.count -2; index>=0; index--) {
+            UIViewController *handler = [array objectAtIndex:index];
+            if (handler.pop) {
+                controller = handler;
+                break;
+            }
+        }
+
+        if (controller) {
+            [self.navigationController popToViewController:controller animated:option.animated];
+            return;
+        }
+    }
+    [self.navigationController popViewControllerAnimated:option.animated];
+
 }
 
 - (void)performBlock:(void(^)(void))blocks{
@@ -342,8 +408,8 @@
 
 }
 
-- (void)onCreate:(UIView *)view{
-
-}
+//- (void)onCreate:(UIView *)view{
+//
+//}
 
 @end

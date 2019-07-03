@@ -12,6 +12,13 @@
 
 + (NSURL *)weexUrlWithFilePath:(NSString *)filePath;
 
++ (NSString *)HTTPS_RemoteResourceBase;
++ (NSString *)HTTPS_RemoteResourceReplace;
++ (NSString *)HTTP_RemoteResourceBase;
++ (NSString *)HTTP_RemoteResourceReplace;
+
++ (NSString *)TCM_RemoteService;
+
 @end
 
 

@@ -8,29 +8,32 @@
 #import "thybridNavigationDefaultImpl.h"
 #import "UIViewController+tHybridWeex.h"
 
+#import "thybridNavigationOption.h"
 
 @implementation thybridNavigationDefaultImpl
 
 - (void)pushViewControllerWithParam:(NSDictionary *)param completion:(WXNavigationResultBlock)block
                       withContainer:(UIViewController *)container
 {
-    if (0 == [param count] || !param[@"url"] || !container) {
-        [super pushViewControllerWithParam:param completion:block withContainer:container];
-        return;
-    }
+    thybridNavigationOption *option = [thybridNavigationOption objectWithKeyValues:param];
 
+    [container performSelectorOnMainThread:@selector(springWithOption:) withObject:option waitUntilDone:NO];
 
-    [container springWithURL:param[@"url"] option:param];
 }
 
 - (void)popViewControllerWithParam:(NSDictionary *)param completion:(WXNavigationResultBlock)block
                      withContainer:(UIViewController *)container
 {
-    if (0 == [param count]) {
-        [super popViewControllerWithParam:param completion:block withContainer:container];
-        return;
-    }
-    [container pop:param];
+//    if (0 == [param count]) {
+//        [super popViewControllerWithParam:param completion:block withContainer:container];
+//        return;
+//    }
+
+    thybridNavigationOption *option = [thybridNavigationOption objectWithKeyValues:param];
+
+    [container performSelectorOnMainThread:@selector(pop:) withObject:option waitUntilDone:NO];
 }
+
+
 
 @end

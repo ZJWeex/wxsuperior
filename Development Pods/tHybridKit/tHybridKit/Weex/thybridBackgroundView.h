@@ -22,6 +22,8 @@ typedef NS_ENUM(NSUInteger, THYBRID_LOADING_STATUS) {
     THYBRID_LOADING_STATUS_NETWORK_ERROR,
     /** 加载失败 */
     THYBRID_LOADING_STATUS_LOAD_FAILED,
+    /** 文件不存在 */
+    THYBRID_LOADING_STATUS_NO_FILE,
     /** 加载完成 */
     THYBRID_LOADING_STATUS_LOAD_FINISH,
     /** 文件解析失败 */
@@ -42,6 +44,8 @@ typedef NS_ENUM(NSUInteger, THYBRID_LOADING_STATUS) {
 @property (nullable, nonatomic,strong) UIBarButtonItem *leftBarButtonItem;
 @property (nullable, nonatomic,strong) UIBarButtonItem *rightBarButtonItem;
 @property (nonatomic, assign) THYBRID_LOADING_STATUS loadingStatus;
+
++ (instancetype)objectWithHandler:(UIViewController<tHybridWeexProtocol> *)handler;
 
 @end
 

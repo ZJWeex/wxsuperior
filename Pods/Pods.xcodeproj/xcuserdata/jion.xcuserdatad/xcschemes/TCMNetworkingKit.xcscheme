@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1020"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CDD06C2E641F7FC8B9A2353F831D01FC"
+               BlueprintIdentifier = "3EE8D37D435592D58D79CC152FB6A3E5"
+               BuildableName = "libTCMNetworkingKit.a"
                BlueprintName = "TCMNetworkingKit"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "libTCMNetworkingKit.a">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

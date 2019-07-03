@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1020"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C0741EBC90579E097E3B482A82967D0F"
+               BlueprintIdentifier = "F4FBC2315AEAE986227002C44B039DE6"
+               BuildableName = "libBindingX.a"
                BlueprintName = "BindingX"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "libBindingX.a">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

@@ -21,7 +21,6 @@
 		3B5542A021095F6D006E58C9 /* XN.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B55429421095F6D006E58C9 /* XN.plist */; };
 		3B5542A121095F6D006E58C9 /* WX.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B55429521095F6D006E58C9 /* WX.plist */; };
 		3B5542A221095F6D006E58C9 /* TCMAppKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B55429621095F6D006E58C9 /* TCMAppKeyManager.m */; };
-		3B629E94218171AF00EAAC57 /* NSObject+tHybridURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B629E8E218171AE00EAAC57 /* NSObject+tHybridURL.m */; };
 		3B629E95218171AF00EAAC57 /* NSURL+XZOL.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B629E8F218171AE00EAAC57 /* NSURL+XZOL.m */; };
 		3BA611EC2182F5AC00CBD958 /* dist in Resources */ = {isa = PBXBuildFile; fileRef = 3BA611EB2182F5AC00CBD958 /* dist */; };
 		3BA9B0542092D4CA005D9FEB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA9B0532092D4CA005D9FEB /* AppDelegate.m */; };
@@ -131,10 +130,8 @@
 		3B55429421095F6D006E58C9 /* XN.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = XN.plist; sourceTree = "<group>"; };
 		3B55429521095F6D006E58C9 /* WX.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WX.plist; sourceTree = "<group>"; };
 		3B55429621095F6D006E58C9 /* TCMAppKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCMAppKeyManager.m; sourceTree = "<group>"; };
-		3B629E8E218171AE00EAAC57 /* NSObject+tHybridURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+tHybridURL.m"; sourceTree = "<group>"; };
 		3B629E8F218171AE00EAAC57 /* NSURL+XZOL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+XZOL.m"; sourceTree = "<group>"; };
 		3B629E92218171AE00EAAC57 /* NSURL+XZOL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+XZOL.h"; sourceTree = "<group>"; };
-		3B629E93218171AE00EAAC57 /* NSObject+tHybridURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+tHybridURL.h"; sourceTree = "<group>"; };
 		3B78BE9D2099A84A001E2A8A /* Superior-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Superior-Prefix.pch"; sourceTree = "<group>"; };
 		3BA611EA2182F5A200CBD958 /* base-weex */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "base-weex"; sourceTree = "<group>"; };
 		3BA611EB2182F5AC00CBD958 /* dist */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dist; path = "base-weex/dist"; sourceTree = "<group>"; };
@@ -299,8 +296,6 @@
 		3B629E8C218171AE00EAAC57 /* network */ = {
 			isa = PBXGroup;
 			children = (
-				3B629E93218171AE00EAAC57 /* NSObject+tHybridURL.h */,
-				3B629E8E218171AE00EAAC57 /* NSObject+tHybridURL.m */,
 				3B629E92218171AE00EAAC57 /* NSURL+XZOL.h */,
 				3B629E8F218171AE00EAAC57 /* NSURL+XZOL.m */,
 			);
@@ -777,7 +772,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Superior/Pods-Superior-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Superior/Pods-Superior-resources.sh",
 				"${PODS_ROOT}/Alipay-SDK/SDK/AlipaySDK.bundle",
 				"${PODS_ROOT}/BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/mapapi.bundle",
 				"${PODS_ROOT}/WeexSDK/pre-build/native-bundle-main.js",
@@ -798,7 +793,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Superior/Pods-Superior-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Superior/Pods-Superior-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DAF6B4DEA7E758775A094D93 /* [CP] Check Pods Manifest.lock */ = {
@@ -840,7 +835,6 @@
 				B65D73AF22CB504F00129AD3 /* TCMLocationModule.m in Sources */,
 				3BAE2B5F2180794600CD7DBA /* XZOLTabBarViewController.m in Sources */,
 				3BE8CB97210899D900445A48 /* NSObject+Bundle.m in Sources */,
-				3B629E94218171AF00EAAC57 /* NSObject+tHybridURL.m in Sources */,
 				B65D73B122CB504F00129AD3 /* WXMapComponent.m in Sources */,
 				B65D73AE22CB504F00129AD3 /* TCMLocationManager.m in Sources */,
 				B6BA306821B2701300DE9E94 /* WXNavigatorModule+Extension.m in Sources */,

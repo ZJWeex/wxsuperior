@@ -7,56 +7,77 @@
 //
 
 #import "TCMWeexImageLoader.h"
-#import <SDWebImage/SDWebImageManager.h>
+#import "NSString+Image.h"
+#import "SDWebImageManager.h"
+
+UIImage *thybrid_CrateGiftImage(NSData * dataImage, UIImage *image);
 
 
-@interface NSString (URL)
-/**获取string对应的图片[限本地图片]*/
-- (nullable UIImage *)wxImage;
-/**获取string对应的URL*/
-- (nullable NSURL *)wxURL;
-
-@end
-
-@implementation NSString (URL)
-- (nullable UIImage *)wxImage{
-    if ([self hasPrefix:@"file://"]) {
-        UIImage *image = [UIImage imageNamed:[self substringFromIndex:7]];
-        return image;
-    }
-    return nil;
-}
-- (nullable NSURL *)wxURL{
-    if ([self hasPrefix:@"https://"] || [self hasPrefix:@"http://"]) {
-        return [NSURL URLWithString:self];
-    }
-    return nil;
-}
-@end
-
-
-@interface TCMWeexImageLoader() <WXImageOperationProtocol>
+@interface TCMWeexImageLoader ()<WXImageOperationProtocol>
 
 @end
 
 @implementation TCMWeexImageLoader
-- (void)cancel {
-}
+
 
 - (id<WXImageOperationProtocol>)downloadImageWithURL:(NSString *)url imageFrame:(CGRect)imageFrame userInfo:(NSDictionary *)options completed:(void (^)(UIImage *, NSError *, BOOL))completedBlock {
 
+    if (!completedBlock) {
+        return self;
+    }
     UIImage *image = url.wxImage;
     if (image) {
         completedBlock(image, nil, YES);
-        return (id<WXImageOperationProtocol>)self;
+        return self;
     }
 
-    return (id<WXImageOperationProtocol>)
-    [[SDWebImageManager sharedManager] loadImageWithURL:url.wxURL options:(0) progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-
+    return (id<WXImageOperationProtocol>)[[SDWebImageManager sharedManager] loadImageWithURL:url.wxURL options:(0) progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        completedBlock([UIImage imageNamed:@"defaultImage"], nil, NO);
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-        completedBlock(image, error, finished);
+
+        if (image.images) {
+            image = thybrid_CrateGiftImage(data, image);
+        }
+        completedBlock( image, error, finished);
     }];
 }
 
+
+
+- (void)cancel {
+
+}
+
 @end
+/**
+ GIF动画
+ 
+ @param dataImage <#dataImage description#>
+ @param image <#image description#>
+ @return <#return value description#>
+ */
+UIImage *thybrid_CrateGiftImage(NSData * dataImage, UIImage *image) {
+
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)dataImage, NULL);
+    size_t count = CGImageSourceGetCount(source);
+
+    CGFloat scale = [UIScreen mainScreen].scale;
+
+    NSMutableArray *arrFrameImages = [NSMutableArray array];
+
+    for (int i = 0; i < count; i++) {
+        CGImageRef CGImage = CGImageSourceCreateImageAtIndex(source, i, NULL);
+
+        UIImage *frameImage = [UIImage imageWithCGImage:CGImage scale:scale orientation:UIImageOrientationUp];
+
+        [arrFrameImages addObject:frameImage];
+
+        CGImageRelease(CGImage);
+    }
+
+    UIImage *animatedImage = [UIImage animatedImageWithImages:arrFrameImages duration:image.duration *count];
+
+    CFRelease(source);
+    return animatedImage;
+
+}

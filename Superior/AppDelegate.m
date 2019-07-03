@@ -12,7 +12,7 @@
 
 #import "SocialShare.h"
 
-#import <QQSDK/TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/TencentOAuth.h>
 #import "TCMAppKeyManager.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "GDPaymentSystem.h"
@@ -38,7 +38,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+#if DEBUG
+    [tHybridKit launchingWeex:[NSURL TCM_RemoteService]];
+#else
     [tHybridKit launchingWeex];
+#endif
+    
+    [thybridNavigationOption setTitleColorHex:@"0xFF0033"];
+    [thybridNavigationOption setBarColorHex:@"0xFFFFFF"];
     [[TCMLocationManager instance] registerWithKey:@"nKXN3Kn5u5GbC1U8GRcFbUKu" result:^(BMKLocationAuthErrorCode authCode) {
         if (authCode == BMKLocationAuthErrorSuccess) {
             

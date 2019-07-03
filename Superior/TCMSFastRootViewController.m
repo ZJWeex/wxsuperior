@@ -8,8 +8,6 @@
 
 #import "TCMSFastRootViewController.h"
 
-#import "NSObject+tHybridURL.h"
-
 #define IPHONE_SCREEN_WIDTH    [[UIScreen mainScreen] bounds].size.width                   //屏幕宽度
 #define IPHONE_SCREEN_HEIGHT   [[UIScreen mainScreen] bounds].size.height                  //屏幕高度
 #define IPHONE_SCREEN_SIZE     [[UIScreen mainScreen] bounds].size                         //屏幕尺寸
@@ -225,7 +223,7 @@
     UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"UINavigationController"];
 
     [UIApplication sharedApplication].keyWindow.rootViewController = vc;
-//    [self levitatedSphere];
+    [self levitatedSphere];
 }
 
 
@@ -234,29 +232,34 @@
     UILabel *levitatedSphere = [[UILabel alloc] initWithFrame:CGRectMake(5, IPHONE_X ? 30 : 20, IPHONE_SCREEN_WIDTH -5, 14)];
     levitatedSphere.textColor = [UIColor grayColor];
     levitatedSphere.textAlignment = NSTextAlignmentLeft;
-    levitatedSphere.text = [self tHybridRemoteBaseURL];
+    levitatedSphere.text = [NSURL weexUrlWithFilePath:@""].description;
     [[UIApplication sharedApplication].keyWindow addSubview:levitatedSphere];
-
-    UILabel *vlabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, IPHONE_SCREEN_WIDTH -10, 12)];
-    UILabel *tlabel = [[UILabel alloc] initWithFrame:CGRectMake(0, IPHONE_X ? 15 : 30, IPHONE_SCREEN_WIDTH -10, 12)];
-
-    tlabel.textColor = vlabel.textColor = [UIColor grayColor];
-    tlabel.font = vlabel.font = [UIFont systemFontOfSize:12.0];
-    tlabel.textAlignment = vlabel.textAlignment = NSTextAlignmentRight;
-    [vlabel addSubview:tlabel];
-
+    
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-
     NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
     // app build版本
     NSString *app_buildV = [infoDictionary objectForKey:@"CFBundleVersion"];
     NSString *app_buildT = [infoDictionary objectForKey:@"TCMBuildTime"];
-
-
-    vlabel.text = [NSString stringWithFormat:@"BuildVersion：%@_%@", app_Version, app_buildV];
-    tlabel.text = [NSString stringWithFormat:@"BuildTime：%@", app_buildT];
-
+    
+    
+    UILabel *vlabel = [[UILabel alloc] initWithFrame:CGRectMake(0, IPHONE_X ? 15 : 30, IPHONE_SCREEN_WIDTH -10, 12)];
+    vlabel.textColor = UIColor.orangeColor;
+    vlabel.text = [NSString stringWithFormat:@"%@_%@：BuildVersion", app_Version, app_buildV];
+    
+    UILabel *tlabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, IPHONE_SCREEN_WIDTH -10, 12)];
+    tlabel.textColor = [UIColor grayColor];
+    tlabel.text = [NSString stringWithFormat:@"%@：BuildTime", app_buildT];
+    
+    
+    
+    UILabel *remoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, IPHONE_X ? 15 : 30, IPHONE_SCREEN_WIDTH -10, 12)];
+    remoteLabel.text = [NSURL TCM_RemoteService];
+    remoteLabel.font = tlabel.font = vlabel.font = [UIFont boldSystemFontOfSize:12.0];
+    
+    [levitatedSphere addSubview:remoteLabel];
     [levitatedSphere addSubview:vlabel];
-
+    [vlabel addSubview:tlabel];
+    
+    vlabel.textAlignment = tlabel.textAlignment = NSTextAlignmentRight;
 }
 @end

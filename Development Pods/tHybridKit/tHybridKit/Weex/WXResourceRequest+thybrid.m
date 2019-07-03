@@ -23,7 +23,7 @@
 
     switch (type) {
         case WXResourceTypeMainBundle:
-            self.timeoutInterval = 5;
+            self.timeoutInterval = 10;
             break;
         case WXResourceTypeImage:
             break;

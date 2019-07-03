@@ -22,5 +22,10 @@
 
 + (void)launchingWeex:(NSString *)env;
 
++ (void)resetEnvironment:(NSString *)networkEnvironment;
+
++ (void)setCustomOption:(NSString *)key  value:(NSString *)value;
++ (NSDictionary *)customOption;
++ (void)restart;
 
 @end
