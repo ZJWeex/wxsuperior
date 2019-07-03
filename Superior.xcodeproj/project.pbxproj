@@ -82,6 +82,13 @@
 		3BE8CBB82108A39000445A48 /* loadingCenter.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3BE8CBB72108A38F00445A48 /* loadingCenter.gif */; };
 		3BEA03CE211829BF008B9721 /* TCMSFastRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BEA03CD211829BF008B9721 /* TCMSFastRootViewController.m */; };
 		984E05907ECEACFA68A238FB /* libPods-SuperiorUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 003F38B9DE31C1DDA23C3A8D /* libPods-SuperiorUITests.a */; };
+		B65D73AC22CB504F00129AD3 /* location_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = B65D73A122CB504F00129AD3 /* location_marker.png */; };
+		B65D73AD22CB504F00129AD3 /* WXPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = B65D73A222CB504F00129AD3 /* WXPointAnnotation.m */; };
+		B65D73AE22CB504F00129AD3 /* TCMLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B65D73A322CB504F00129AD3 /* TCMLocationManager.m */; };
+		B65D73AF22CB504F00129AD3 /* TCMLocationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = B65D73A522CB504F00129AD3 /* TCMLocationModule.m */; };
+		B65D73B022CB504F00129AD3 /* WXPaopaoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B65D73A622CB504F00129AD3 /* WXPaopaoView.m */; };
+		B65D73B122CB504F00129AD3 /* WXMapComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = B65D73A822CB504F00129AD3 /* WXMapComponent.m */; };
+		B65D73B222CB504F00129AD3 /* MapAnnotationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B65D73A922CB504F00129AD3 /* MapAnnotationModel.m */; };
 		B6BA306421B2668400DE9E94 /* WXGlobalEventModule+PostEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA306121B2602900DE9E94 /* WXGlobalEventModule+PostEvent.m */; };
 		B6BA306821B2701300DE9E94 /* WXNavigatorModule+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA306721B2701300DE9E94 /* WXNavigatorModule+Extension.m */; };
 		B6BA307821B5183E00DE9E94 /* WXPickerModule+Evnet.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA307721B5183E00DE9E94 /* WXPickerModule+Evnet.m */; };
@@ -212,6 +219,19 @@
 		782F76A87ECEB6F34CA45938 /* libPods-Superior.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Superior.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DE6851403CCFC0D5273B075 /* Pods-Superior.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Superior.release.xcconfig"; path = "Pods/Target Support Files/Pods-Superior/Pods-Superior.release.xcconfig"; sourceTree = "<group>"; };
 		AB249764D60D0948DDDE2CD4 /* Pods-SuperiorTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperiorTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuperiorTests/Pods-SuperiorTests.release.xcconfig"; sourceTree = "<group>"; };
+		B65D739F22CB504F00129AD3 /* WXPaopaoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXPaopaoView.h; sourceTree = "<group>"; };
+		B65D73A022CB504F00129AD3 /* WXMapComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXMapComponent.h; sourceTree = "<group>"; };
+		B65D73A122CB504F00129AD3 /* location_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location_marker.png; sourceTree = "<group>"; };
+		B65D73A222CB504F00129AD3 /* WXPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXPointAnnotation.m; sourceTree = "<group>"; };
+		B65D73A322CB504F00129AD3 /* TCMLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCMLocationManager.m; sourceTree = "<group>"; };
+		B65D73A422CB504F00129AD3 /* MapAnnotationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapAnnotationModel.h; sourceTree = "<group>"; };
+		B65D73A522CB504F00129AD3 /* TCMLocationModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCMLocationModule.m; sourceTree = "<group>"; };
+		B65D73A622CB504F00129AD3 /* WXPaopaoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXPaopaoView.m; sourceTree = "<group>"; };
+		B65D73A722CB504F00129AD3 /* WXPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXPointAnnotation.h; sourceTree = "<group>"; };
+		B65D73A822CB504F00129AD3 /* WXMapComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXMapComponent.m; sourceTree = "<group>"; };
+		B65D73A922CB504F00129AD3 /* MapAnnotationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapAnnotationModel.m; sourceTree = "<group>"; };
+		B65D73AA22CB504F00129AD3 /* TCMLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCMLocationManager.h; sourceTree = "<group>"; };
+		B65D73AB22CB504F00129AD3 /* TCMLocationModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCMLocationModule.h; sourceTree = "<group>"; };
 		B6BA305F21B25FCE00DE9E94 /* WXStorageModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WXStorageModule.h; sourceTree = "<group>"; };
 		B6BA306121B2602900DE9E94 /* WXGlobalEventModule+PostEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WXGlobalEventModule+PostEvent.m"; sourceTree = "<group>"; };
 		B6BA306221B2608900DE9E94 /* WXGlobalEventModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXGlobalEventModule.h; sourceTree = "<group>"; };
@@ -330,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				3BB4FB36212BC29E00BD3A01 /* Superior.entitlements */,
+				B65D739E22CB504F00129AD3 /* LocationModule */,
 				3BE8CB6A2108931500445A48 /* Payment */,
 				3BC13EA421099C50004C13E5 /* SocialShare */,
 				3BA9B0522092D4CA005D9FEB /* AppDelegate.h */,
@@ -500,6 +521,26 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		B65D739E22CB504F00129AD3 /* LocationModule */ = {
+			isa = PBXGroup;
+			children = (
+				B65D73A122CB504F00129AD3 /* location_marker.png */,
+				B65D73A422CB504F00129AD3 /* MapAnnotationModel.h */,
+				B65D73A922CB504F00129AD3 /* MapAnnotationModel.m */,
+				B65D73AA22CB504F00129AD3 /* TCMLocationManager.h */,
+				B65D73A322CB504F00129AD3 /* TCMLocationManager.m */,
+				B65D73AB22CB504F00129AD3 /* TCMLocationModule.h */,
+				B65D73A522CB504F00129AD3 /* TCMLocationModule.m */,
+				B65D73A022CB504F00129AD3 /* WXMapComponent.h */,
+				B65D73A822CB504F00129AD3 /* WXMapComponent.m */,
+				B65D739F22CB504F00129AD3 /* WXPaopaoView.h */,
+				B65D73A622CB504F00129AD3 /* WXPaopaoView.m */,
+				B65D73A722CB504F00129AD3 /* WXPointAnnotation.h */,
+				B65D73A222CB504F00129AD3 /* WXPointAnnotation.m */,
+			);
+			path = LocationModule;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -629,6 +670,7 @@
 				3B5542A021095F6D006E58C9 /* XN.plist in Resources */,
 				3B18F73A210F0390005D49A6 /* Assets.xcassets in Resources */,
 				3BC13ED92109A51A004C13E5 /* umsocial_sms.png in Resources */,
+				B65D73AC22CB504F00129AD3 /* location_marker.png in Resources */,
 				3BC13ED32109A51A004C13E5 /* umsocial_linkedin.png in Resources */,
 				3BC13EDC2109A51A004C13E5 /* umsocial_whatsapp.png in Resources */,
 				3BC13EE92109A51A004C13E5 /* umsocial_sina.png in Resources */,
@@ -737,6 +779,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Superior/Pods-Superior-resources.sh",
 				"${PODS_ROOT}/Alipay-SDK/SDK/AlipaySDK.bundle",
+				"${PODS_ROOT}/BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/mapapi.bundle",
 				"${PODS_ROOT}/WeexSDK/pre-build/native-bundle-main.js",
 				"${PODS_ROOT}/WeexSDK/pre-build/weex-main-jsfm.js",
 				"${PODS_ROOT}/WeexSDK/pre-build/weex-polyfill.js",
@@ -746,6 +789,7 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlipaySDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mapapi.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/native-bundle-main.js",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/weex-main-jsfm.js",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/weex-polyfill.js",
@@ -783,6 +827,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BC13EF22109C6D5004C13E5 /* SocialShare.m in Sources */,
+				B65D73B222CB504F00129AD3 /* MapAnnotationModel.m in Sources */,
 				B6BA307821B5183E00DE9E94 /* WXPickerModule+Evnet.m in Sources */,
 				B6BA306421B2668400DE9E94 /* WXGlobalEventModule+PostEvent.m in Sources */,
 				3BE8CB6D2108932200445A48 /* GDPaymentSystem.m in Sources */,
@@ -792,12 +837,17 @@
 				3B629E95218171AF00EAAC57 /* NSURL+XZOL.m in Sources */,
 				3BE8CB932108995400445A48 /* CESHelper.m in Sources */,
 				3BE8CB732108936900445A48 /* GDPaymentTypeModel.m in Sources */,
+				B65D73AF22CB504F00129AD3 /* TCMLocationModule.m in Sources */,
 				3BAE2B5F2180794600CD7DBA /* XZOLTabBarViewController.m in Sources */,
 				3BE8CB97210899D900445A48 /* NSObject+Bundle.m in Sources */,
 				3B629E94218171AF00EAAC57 /* NSObject+tHybridURL.m in Sources */,
+				B65D73B122CB504F00129AD3 /* WXMapComponent.m in Sources */,
+				B65D73AE22CB504F00129AD3 /* TCMLocationManager.m in Sources */,
 				B6BA306821B2701300DE9E94 /* WXNavigatorModule+Extension.m in Sources */,
+				B65D73AD22CB504F00129AD3 /* WXPointAnnotation.m in Sources */,
 				3BC66EB0210B11C600635CE1 /* SocialShareMessage+WeChat.m in Sources */,
 				3BA9B0622092D4CA005D9FEB /* main.m in Sources */,
+				B65D73B022CB504F00129AD3 /* WXPaopaoView.m in Sources */,
 				3BA9B0542092D4CA005D9FEB /* AppDelegate.m in Sources */,
 				3B5542A221095F6D006E58C9 /* TCMAppKeyManager.m in Sources */,
 				3BE8CB702108934100445A48 /* GDWechatPayment.m in Sources */,

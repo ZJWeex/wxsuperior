@@ -27,9 +27,9 @@
 import ButtonItem from "@/base-superior/components/ButtonItem.vue";
 import Fetch from "@/base-superior/Fetch.js";
 import Define from "@/base-superior/Define.js";
-import DB from "@/base-superior/base-superior/shopping_cartdb.js"
+import DB from "@/base-superior/shopping_cartdb.js"
+import navigation from "@/base-superior/components/NavigationBar.vue";
 
-const navigator = weex.requireModule('navigator')
 var modal = weex.requireModule("modal");
 const storage = weex.requireModule("storage");
 
@@ -48,6 +48,7 @@ export default {
     },
     data() {
         return {
+            pushEnable:true,
             cartGoodsCount: 0,
         };
     },
@@ -71,9 +72,37 @@ export default {
                 self.cartGoodsCount = count;
             }) 
         }
-        DB.getCounts(function(count){
-            self.cartGoodsCount = count;
+        storage.getItem(Define.kNative,event=>{
+            //判断是否从消费者端跳转过来
+            if(event.result == "success"){
+                storage.removeItem(Define.kNative,function(e){})
+                if(weex.config.env.appName.indexOf('buyer') != -1){
+                    //是否登录后首次进入weex
+                    storage.getItem(Define.kNormalLogin,function(e){
+                        if(e.result == "success"){
+                            storage.removeItem(Define.kNormalLogin,call=>{})
+                            //同步游客购物车数据
+                            DB.touristsSynchCartData(function(ret){
+                                DB.getCounts(function(count){
+                                    self.cartGoodsCount = count;
+                                })
+                            });
+                        }else{
+                            DB.loadCartData(function(e){
+                                DB.getCounts(function(count){
+                                    self.cartGoodsCount = count;
+                                })
+                            })
+                        }
+                    })
+                }
+            }else{
+                DB.getCounts(function(count){
+                    self.cartGoodsCount = count;
+                })
+            }
         })
+        
     },
     methods: {
         //添加购物车:分登录和游客模式
@@ -95,22 +124,22 @@ export default {
                                 duration:0.5}); 
                     })
                  }else{
-                     DB.getItem(self.goodsModel.supGoodsId,function(ret){
-                         if (ret.data != 'undefined' && ret.data.length > 0){
-                             var item = JSON.parse(ret.data)
+                    DB.getItem(self.goodsModel.supGoodsId,function(ret){
+                        if (ret.data != 'undefined' && ret.data.length > 0){
+                            var item = JSON.parse(ret.data)
                             if(item.count>=self.goodsModel.supGoodsInventory){
                                 modal.toast({message:'库存不足'})
                             }else{
                                 self.addCartToServer();
                             }
-                         }else{
+                        }else{
                              if(self.goodsModel.supGoodsInventory > 0){
                                  self.addCartToServer();
                              }else{
                                  modal.toast({message:'库存不足'})
                              }
-                         }
-                     });
+                        }
+                    });
                      
                  }
              });
@@ -193,22 +222,37 @@ export default {
                         });
                     }
                 }else{
-                    //存入本地数据库            
-                    DB.setItem(goodsData,event=>{
+                    if(goodsData.supGoodsInventory>0){
+                        //存入本地数据库            
+                        DB.setItem(goodsData,event=>{
+                            callback(event);
+                        });
+                    }else{
+                        var event = {
+                            result:'fail',
+                            data:'库存不足'
+                        }
                         callback(event);
-                    });
+                    }
                 }
             })
         },
         gobackHome: function() {
-            navigator.go(-100,event=>{});
-            // navigator.pop({},function(value){});
+            navigation.pop({popToRoot:true},function(value){});
         },
         gobackCart: function() {
-            storage.setItem(Define.kGoodsDetail_Cart,'FromGoodsDetail',event=>{})
-            setTimeout(()=>{
-                navigator.push({url:'shopping_index.html', title:'购物车'}, event =>{});
-            },300)
+            const self = this;
+            if(this.pushEnable){
+                this.pushEnable = false;
+                setTimeout(()=>{
+                    storage.setItem(Define.kGoodsDetail_Cart,'FromGoodsDetail',event=>{
+                        self.pushEnable = true;
+                    })
+                    navigation.push({url:'shopping_index.html', title:'购物车'}, function(){
+                    });
+                    
+                },300)
+            }
             
         },
     }

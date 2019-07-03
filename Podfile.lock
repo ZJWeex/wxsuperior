@@ -21,9 +21,11 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - Alipay-SDK (15.5.0)
+  - BaiduMapKit (4.3.2)
   - BindingX (1.0.3):
     - WeexPluginLoader
     - WeexSDK
+  - BMKLocationKit (1.6.0)
   - FLAnimatedImage (1.0.12)
   - GTSDK (2.2.0.0)
   - Masonry (1.1.0)
@@ -48,7 +50,9 @@ PODS:
 
 DEPENDENCIES:
   - Alipay-SDK (~> 15.5.0)
+  - BaiduMapKit (~> 4.3.2)
   - BindingX (~> 1.0.3)
+  - BMKLocationKit (~> 1.6.0)
   - GTSDK (~> 2.2.0)
   - Masonry (~> 1.1.0)
   - MBProgressHUD (~> 1.1.0)
@@ -63,7 +67,9 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworking
     - Alipay-SDK
+    - BaiduMapKit
     - BindingX
+    - BMKLocationKit
     - FLAnimatedImage
     - GTSDK
     - Masonry
@@ -84,7 +90,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   Alipay-SDK: 704c302c8619e235f9acfb6f731bb7f36265bca5
+  BaiduMapKit: a5d9580553355d39a91b24c5eb91ebf298c64038
   BindingX: b3c6c1c5dcd8e50277cfc5daad09d7010c227524
+  BMKLocationKit: c8bd4f213b231f743c12c3095ad6a8311db259d8
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   GTSDK: 9be6d3c6e7608cb78bb35deba7dbabcde651b0c3
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -98,6 +106,6 @@ SPEC CHECKSUMS:
   WeexPluginLoader: 85c1304f8ba29864e58531614a0acfeceef1b85c
   WeexSDK: ced3f2ef2f0cb48d1d76fd2f03c645572c632d21
 
-PODFILE CHECKSUM: 84c6a256ddf60f56e885e40eacb9b4c7e973a2ec
+PODFILE CHECKSUM: e252e430047c9d69c9f69920239db6cc963a526e
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.5.2

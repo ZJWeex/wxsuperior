@@ -20,10 +20,10 @@
 #else
 
 #if DEBUG
-    return  @"http://192.168.15.227:8081/dist";
+    return  @"http://192.168.15.220:8081/dist/";
 #else
-    return  @"http://192.168.15.100:8081/dist";
-//    return @"https://s3.cn-north-1.amazonaws.com.cn/h5.taocai.mobi/down/thybrid/dev/weex-superior/";
+    return  @"http://192.168.15.220:8081/dist/";
+
 #endif
 
 #endif

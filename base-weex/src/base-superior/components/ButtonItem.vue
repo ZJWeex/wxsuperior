@@ -6,22 +6,19 @@
                   :textCong="{font:22,color:'#999',dotTop:-10,dotRight:20}" 
                   @onclick="gobackCart"></ButtonItem>-->
 <template>
-    <div class="button-item buttonshadow" 
-        ref="button_item" 
-        :style="bindBtnType()" @click="onclick">
+    <div class="button-item buttonshadow" :style="bindBtnType()" @click="onclick">
         <image v-if="img.length > 0" :src='img' 
-            :style="imgBindStyle()"/>
+                :style="imgBindStyle()"/>
         <text v-if="title.length > 0" class="button-title" 
-              :style="{ fontSize:textCong.font + 'px', color:textCong.color }">{{ title }}</text>
+                :style="{ fontSize:textCong.font + 'px', color:textCong.color }">{{ title }}</text>
+        <!-- badge -->
         <div class="badge-tag" v-if="badge > 0" 
-            :style="{right:(textCong.dotRight==10 || !textCong.dotRight)?10:textCong.dotRight<0?0:textCong.dotRight, 
-                     top:(textCong.dotTop==10 || !textCong.dotTop)?10:textCong.dotTop<0?0:textCong.dotRight,
-                     'padding-left':badge>1?8:10,'padding-right':badge>1?8:10}">
-          <text class="badge-text">{{badge}}</text>
+                :style="badgeBindStyle()">
+            <text class="badge-text">{{badge}}</text>
         </div>
         <div v-if="dot && badge<=0" class="dot" 
-            :style="{right:(textCong.dotRight==0 ||!textCong.dotRight)?0:textCong.dotRight,
-                     top:(textCong.dotTop==10 || !textCong.dotTop)?10:textCong.dotTop}"></div>
+                :style="{right:(textCong.dotRight==0 ||!textCong.dotRight)?0:textCong.dotRight,
+                        top:(textCong.dotTop==10 || !textCong.dotTop)?10:textCong.dotTop}"></div>
     </div>
 </template>
 <script>
@@ -104,6 +101,22 @@ export default {
             let relustStyle = {...imgWHType,...imgMarginTopType,...imgMarginRightType}
             return relustStyle;
         },
+        //badge布局
+        badgeBindStyle:function(){
+            const { textCong, badge } = this;
+            const that = this;
+            var style = {};
+            if(badge.toString().length>1){
+                style = {right:(textCong.dotRight==10 || !textCong.dotRight)?10:textCong.dotRight<0?0:textCong.dotRight, 
+                        top:(textCong.dotTop==10 || !textCong.dotTop)?10:textCong.dotTop<0?0:textCong.dotTop,
+                        'padding-left':10,'padding-right':10};
+            }else{
+                style = {right:(textCong.dotRight==10 || !textCong.dotRight)?10:textCong.dotRight<0?0:textCong.dotRight, 
+                        top:(textCong.dotTop==10 || !textCong.dotTop)?10:textCong.dotTop<0?0:textCong.dotTop,
+                        'width':30,};
+            }
+            return style;
+        },
         //点击事件
         onclick:function(e) {
             this.$emit('onclick', e);
@@ -115,8 +128,9 @@ export default {
   .button-item {
     justify-content: center;
     align-items: center;
+    flex-direction: row;
     border-bottom-style: solid;
-    overflow: visible;
+    /* overflow: visible; */
     /* background-color: aqua;  */
   }
   .buttonshadow{

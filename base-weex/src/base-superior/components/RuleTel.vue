@@ -28,28 +28,28 @@
                :show="isBottomShow"
                @wxcPopupOverlayClicked="popupOverlayBottomClick"
                pos="bottom"
-               :height="[dataModel.scopeInstructions.length>22?'700':'500']">
+               :height="(dataModel.scopeInstructions.length > 22 ? '700':'500')">
       <div class="popup-content">
         <div style="flex-direction: row;margin-bottom:10px;align-items: center;">
-          <image class="popup-img" src="/web/assets/goods_detail/qit.png"/>
+          <image class="popup-img" src="/web/assets/sup/sup_goods_detail_qit.png"/>
           <text class="popup-title">{{ dataModel.policy }}</text>
         </div>
         <div style="flex-direction: row;margin-bottom:10px;">
-          <image class="popup-img" src="/web/assets/goods_detail/fh.png"/>
+          <image class="popup-img" src="/web/assets/sup/sup_goods_detail_fh.png"/>
           <div style="flex:1;">
             <text class="popup-title">发货说明</text>
             <text class="popup-subtitle">{{dataModel.shippingInstructions}}</text>
           </div>
         </div>
         <div style="flex-direction: row;margin-bottom:10px;">
-          <image class="popup-img" src="/web/assets/goods_detail/thh.png"/>
+          <image class="popup-img" src="/web/assets/sup/sup_goods_detail_thh.png"/>
           <div style="flex:1;">
             <text class="popup-title">退换货说明</text>
             <text class="popup-subtitle">{{ dataModel.policyInstructions }}</text>
           </div>
         </div>
         <div style="flex-direction: row;margin-bottom:10px;">
-          <image class="popup-img" src="/web/assets/goods_detail/psfw.png"/>
+          <image class="popup-img" src="/web/assets/sup/sup_goods_detail_psfw.png"/>
           <div style="flex:1;">
             <text class="popup-title">配送范围</text>
             <text class="popup-subtitle">{{dataModel.scopeInstructions }}</text>
@@ -65,58 +65,68 @@ const modal = weex.requireModule("modal");
 import { WxcPopup } from "weex-ui";
 export default {
   components: { WxcPopup },
-  props: ['dataModel'],
+  props: {
+    dataModel: {},
+    isBottomShow:{
+      type: Boolean,
+      default: false,
+    }
+  },
   data(){
     return {
       isWeb: WXEnvironment.platform === 'Web',
-      isBottomShow: false,
     }
   },
   methods: {
       ruleClick: function() {
-          // modal.toast({message:'服务规则'})
-          this.isBottomShow = true;
+        // modal.toast({message:'服务规则'})
+        this.isBottomShow = true;
+        this.$emit('displayRule', this.isBottomShow);
       },
       popupOverlayBottomClick:function(){
         this.isBottomShow = false;
+        this.$emit('displayRule', this.isBottomShow);
       },
       telClick: function() {
         var that = this;
-          modal.confirm({
-            message: '联系客服:' + this.dataModel.servicePhone,
-            okTitle: '确定',
-            cancelTitle: '取消'
-          }, function(value){
-            if(value === '确定') {
-              if (WXEnvironment.platform === 'Web'){
-                //web 获取属性getAttribute
-                // modal.toast({message:'web页不支持拨打电话'})
-                var webEl = that.$refs['webview'];
-                console.log('web = '+ webEl.$el)
-                webEl.$el.setAttribute('src',"tel:10086")
-                 var webview = weex.requireModule('webview');
-                webview.reload( webEl.$el);
-
-              }else if(WXEnvironment.platform === 'iOS'){
-                //使用定义的that,不要使用this
-                var webEl = that.$refs.webview;
-                //设置两次，否则弹出框取消后就不会再弹出
-                webEl.setAttr('src',"")
-                webEl.setAttr('src',"tel:" + that.dataModel.servicePhone)
-                var webview = weex.requireModule('webview');
-                webview.reload(webEl);
-                setTimeout(function(){
-                  //重置，否则滑动iOS还会弹出拨打电话弹框
-                  webEl.setAttr('src',"")
-                },500);
+        if(WXEnvironment.platform === 'iOS'){
+            //使用定义的that,不要使用this
+            var webEl = that.$refs.webview;
+            //设置两次，否则弹出框取消后就不会再弹出
+            webEl.setAttr('src',"")
+            webEl.setAttr('src',"tel:" + that.dataModel.servicePhone)
+            var webview = weex.requireModule('webview');
+            webview.reload(webEl);
+            setTimeout(function(){
+              //重置，否则滑动iOS还会弹出拨打电话弹框
+              webEl.setAttr('src',"")
+            },500);
                 
-              }else if(WXEnvironment.platform === 'android'){
-                //android使用上述方法无效
-                //采用原生交互
-                //  Superior.telCall(that.dataModel.servicePhone)
-              }
-            }
-          })
+        }else{
+            modal.confirm({
+                message: '联系客服:' + this.dataModel.servicePhone,
+                okTitle: '确定',
+                cancelTitle: '取消'
+              }, function(value){
+                if(value === '确定') {
+                  if (WXEnvironment.platform === 'Web'){
+                    //web 获取属性getAttribute
+                    // modal.toast({message:'web页不支持拨打电话'})
+                    var webEl = that.$refs['webview'];
+                    console.log('web = '+ webEl.$el)
+                    webEl.$el.setAttribute('src',"tel:10086")
+                    var webview = weex.requireModule('webview');
+                    webview.reload( webEl.$el);
+
+                  }else if(WXEnvironment.platform === 'android'){
+                    //android使用上述方法无效
+                    //采用原生交互
+                     weex.requireModule('myGlobalEvent').telCall(that.dataModel.servicePhone)
+                  }
+                }
+              })
+          }
+          
       }
   }
 };

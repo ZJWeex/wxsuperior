@@ -44,7 +44,6 @@ export default {
 
 <style scoped>
 .slider {
-    margin-top: 5px;
     height: 450px;
   }
   .Indicator {

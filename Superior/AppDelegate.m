@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <tHybridKit.h>
+#import "TCMLocationManager.h"
 
 #import "SocialShare.h"
 
@@ -38,7 +39,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [tHybridKit launchingWeex];
-
+    [[TCMLocationManager instance] registerWithKey:@"nKXN3Kn5u5GbC1U8GRcFbUKu" result:^(BMKLocationAuthErrorCode authCode) {
+        if (authCode == BMKLocationAuthErrorSuccess) {
+            
+        }
+    }];
     // 通过个推平台分配的appId、 appKey 、appSecret 启动SDK，注：该方法需要在主线程中调用
     [GeTuiSdk startSdkWithAppId:kGtAppId appKey:kGtAppKey appSecret:kGtAppSecret delegate:self];
     // 注册 APNs

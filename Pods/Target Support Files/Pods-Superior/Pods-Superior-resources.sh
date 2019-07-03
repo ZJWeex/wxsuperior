@@ -93,6 +93,7 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/Alipay-SDK/SDK/AlipaySDK.bundle"
+  install_resource "${PODS_ROOT}/BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/mapapi.bundle"
   install_resource "${PODS_ROOT}/WeexSDK/pre-build/native-bundle-main.js"
   install_resource "${PODS_ROOT}/WeexSDK/pre-build/weex-main-jsfm.js"
   install_resource "${PODS_ROOT}/WeexSDK/pre-build/weex-polyfill.js"
@@ -101,6 +102,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/Alipay-SDK/SDK/AlipaySDK.bundle"
+  install_resource "${PODS_ROOT}/BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/mapapi.bundle"
   install_resource "${PODS_ROOT}/WeexSDK/pre-build/native-bundle-main.js"
   install_resource "${PODS_ROOT}/WeexSDK/pre-build/weex-main-jsfm.js"
   install_resource "${PODS_ROOT}/WeexSDK/pre-build/weex-polyfill.js"

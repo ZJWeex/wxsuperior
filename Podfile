@@ -30,6 +30,9 @@ target 'Superior' do
   pod 'MBProgressHUD', '~> 1.1.0'
   pod 'SDWebImage/GIF'
   pod 'GTSDK','~>2.2.0'
+  
+  pod 'BaiduMapKit', '~> 4.3.2'
+  pod 'BMKLocationKit', '~> 1.6.0'
 
 #    pod 'tHybridKit', '~> 0.2.5'
 end

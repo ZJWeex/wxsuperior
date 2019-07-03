@@ -21,7 +21,7 @@
 //    fullpath = [NSString stringWithFormat:@"%@%@", basePath, filePath];
 //    return [NSURL fileURLWithPath:fullpath isDirectory:YES];
 #endif
-    fullpath = [NSString stringWithFormat:@"%@/base-superior/%@", [filePath tHybridRemoteBaseURL], filePath];
+    fullpath = [NSString stringWithFormat:@"%@%@", [filePath tHybridRemoteBaseURL], filePath];
     return [NSURL URLWithString:fullpath];
 
 }

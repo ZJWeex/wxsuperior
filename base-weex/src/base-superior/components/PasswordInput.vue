@@ -1,6 +1,6 @@
 <template>
-    <wxc-popup popup-color="#f2f2f2"
-               ref="wxcPopup" 
+    <wxc-popup ref="wxcPopup"
+               popup-color="#f2f2f2" 
                :show="show" 
                @wxcPopupOverlayClicked="popupOverlayBottomClick" 
                pos="bottom" 
@@ -21,12 +21,18 @@
             <text class="title-text">{{ title }}</text>
             <span style="padding:20px;" />
         </div>
-        <div class="password-content">
+        <div :class="[isAndroid?'android-password-content':'password-content']">
             <div v-for="(item,i) in maxArray" :key="i" class="password-item">
                 <div v-if="i<passwordText.length" class="point"></div>
             </div>
         </div>
-        <text v-if="forgetpwd.length>0" class="forget-pwd" @click="forgetpwdClick">{{ forgetpwd }}</text>
+        <div v-if="isAndroid" style="flex-direction:row;width:750px;position: absolute;top: 240px;">
+            <div style="flex:1"></div>
+            <text v-if="forgetpwd.length>0" class="android-forget-pwd" @click="forgetpwdClick">{{ forgetpwd }}</text>
+        </div>
+        <div v-else>
+            <text v-if="forgetpwd.length>0" class="forget-pwd" @click="forgetpwdClick">{{ forgetpwd }}</text>
+        </div>
     </wxc-popup>
 </template>
 
@@ -92,11 +98,10 @@ export default {
         onChange:function(event){
             this.passwordText = '';
         },
-        //andriod键盘弹出隐藏事件,ios该事件存在问题
+        //andriod键盘弹出隐藏事件,ios调用modal组件会死循环
         keyboard:function(e){
             const self = this;
             if(self.isAndroid){
-                //ios在该方法中使用modal.alert组件会引起死循环
                 // modal.alert({message:"keyboard："+JSON.stringify(e)})
                 if(e.isShow){
                     //android的weexsdk0.19以下没有keyboardSize参数
@@ -146,6 +151,18 @@ export default {
     border-width:2px;
     border-radius:10px;
 }
+.android-password-content {
+    position: absolute;
+    top: 80px;
+    flex-direction:row;
+    align-items:center;
+    margin:34px;
+    width: 682px;
+    background-color:#ffffff;
+    border-color:#f2f2f2;
+    border-width:2px;
+    border-radius:10px;
+}
 .password-item{
     flex:1;
     height:90px;
@@ -160,9 +177,16 @@ export default {
     background-color:#333333;
     border-radius:10px;
 }
+.android-forget-pwd{
+    padding: 10px;
+    margin-right:20px;
+    font-size: 28px;
+    color: #333333; 
+}
 .forget-pwd {
     align-self: flex-end;
     margin-right:20px;
+    padding: 10px;
     font-size: 28px;
     color: #333333;
 }

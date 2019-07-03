@@ -41,7 +41,7 @@ export default {
         }
     },
     mounted: function () {
-        console.log('selectid'+this.selectId)
+        console.log('selectid：'+this.selectId)
     },
     methods: {
         itemClick:function(sender){

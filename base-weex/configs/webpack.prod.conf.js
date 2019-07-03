@@ -116,4 +116,5 @@ const webConfig = webpackMerge(commonConfig[0], {
   ]
 });
 
-module.exports = [weexConfig, webConfig]
+/** 生产环境暂时关闭 Web 编译 */
+module.exports = [weexConfig/*, webConfig*/]
