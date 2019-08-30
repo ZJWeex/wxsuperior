@@ -21,14 +21,9 @@
             </div>
         </div>
 
-        <wxc-tab-page ref="wxc-tab-page"
-                :tab-titles="tabTitles"
-                :tab-styles="tabStyles"
-                title-type="text"
-                :tab-page-height="tabPageHeight"
-                :needSlider='true'
-                wrapBgColor='#fff'
-                @wxcTabPageCurrentTabSelected="wxcTabPageCurrentTabSelected">
+        <tab-page ref="wxc-tab-page"
+                :tabTitles="tabTitles"
+                @tabPageDidSelected="wxcTabPageCurrentTabSelected">
                 <div v-for="(item, index) in data" :key="index">
                     <HotPage v-if="item.id === 'tuijian'" 
                               class="classlist"
@@ -40,22 +35,7 @@
                                 :classId='item.id'
                                 :style="{ height: (tabPageHeight - tabStyles.height) + 'px' }"></ClassList>
                 </div>
-        </wxc-tab-page>
-        <div class="fixed" @click="pullDownClick"
-            :style="{top:navigationHeight+2}">
-            <div class="gradient"></div>
-            <div class="arrow">
-                <wxc-icon v-if="tabTitles.length>0" name="more_unfold" ref='arrowImg' @wxcIconClicked="pullDownClick"></wxc-icon>
-                <!-- 图片在andriod上显示角被截掉 -->
-                <!-- <image class="arrowImg" ref='arrowImg' resize="contain" src="/web/assets/sup/sup_homepage_down.png"/> -->
-            </div>
-        </div>
-        <popover ref="popover" :show="showPopover"
-                 :topoffset="navigationHeight+70"
-                 :dataSorce="tabTitles"
-                 @didSelectItem="didSelectPopoverItem"
-                 @closePopover="closePopover"></popover>
-        <privacyAlert v-if="!miniProgram"></privacyAlert>
+        </tab-page>
     </div>
 </template>
 <script>
@@ -185,7 +165,7 @@ export default {
         //下拉选择分类
         didSelectPopoverItem:function(index){
             console.log('index:',index)
-            this.$refs['wxc-tab-page'].setPage(index)
+            // this.$refs['wxc-tab-page'].setPage(index)
             this.showPopover = false
             let el = this.$refs.arrowImg
             Reftrans.transformRotateX(el,0)
@@ -215,7 +195,7 @@ export default {
         //滑动手势
         classListPan(e){
             if (BindEnv.supportsEBForAndroid()) {
-                this.$refs['wxc-tab-page'].bindExp(e.element);
+                // this.$refs['wxc-tab-page'].bindExp(e.element);
             }
         },
         wxcMinibarMiddleButtonClicked () {
